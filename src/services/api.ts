@@ -1,11 +1,10 @@
 import Joi from "joi";
-import { Collection, Db, Document, ObjectId, WithId } from "mongodb";
+import { Collection, Document, ObjectId, WithId } from "mongodb";
 import { NextApiRequest, NextApiResponse } from "next";
 import { sendError } from "next/dist/server/api-utils";
 import { getDb } from "./db";
 
 type Context = {
-  db: Db;
   Users: Collection;
   Groups: Collection;
   Wishes: Collection;
@@ -30,12 +29,7 @@ export const withContext =
         return sendError(res, 400, "No x-user-code cookie provided.");
       }
 
-      const db = await getDb();
-
-      const Users = db.collection("users");
-      const Groups = db.collection("groups");
-      const Wishes = db.collection("wishes");
-      const Comments = db.collection("comments");
+      const { Users, Groups, Wishes, Comments } = await getDb();
 
       const me = await (async () => {
         const me = await Users.findOne({ code });
@@ -63,7 +57,6 @@ export const withContext =
       const now = new Date();
 
       const ctx = {
-        db,
         Users,
         Groups,
         Wishes,
@@ -121,6 +114,7 @@ export const handleEntity = async (
   }
 ) => {
   const entity = await getEntity(req, res, collection, param);
+
   switch (req.method) {
     case "PUT":
       if (!updateSchema) {
@@ -135,12 +129,14 @@ export const handleEntity = async (
           $set: Joi.attempt(req.body, updateSchema),
         }
       );
+      return entity._id;
     case "DELETE":
       if (!(await canDelete(entity))) {
         throw sendError(res, 400, "You cannot delete this entity.");
       }
       await cascade?.(entity);
       await collection.deleteOne(entity._id);
+      return entity._id;
     default:
       throw sendError(res, 400, "Unsupported method");
   }

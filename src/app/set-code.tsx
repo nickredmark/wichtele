@@ -1,9 +1,9 @@
 "use client";
 
 import { FC, useState } from "react";
-import { Form } from "../components/form";
+import { Form } from "./form";
 
-export const CodeForm: FC = () => {
+export const SetCode: FC = () => {
   const [code, setCode] = useState("");
 
   return (
@@ -14,6 +14,7 @@ export const CodeForm: FC = () => {
       }}
       canSubmit={!!code}
       submitLabel="Send"
+      inline
     >
       <input
         value={code}

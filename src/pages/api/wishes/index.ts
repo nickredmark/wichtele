@@ -14,6 +14,9 @@ const handler: NextApiHandlerWithContext = async (req, res, ctx) =>
       url: Joi.string().uri(),
       user: TYPES.objectId.default(ctx.me._id),
     }),
+    data: {
+      groups: [],
+    },
   });
 
 export default withContext(handler);

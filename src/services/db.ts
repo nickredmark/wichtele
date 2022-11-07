@@ -9,6 +9,10 @@ export const getDb = async () => {
   });
   await client.connect();
   const db = client.db(process.env.DB_NAME);
+  const Users = db.collection("users");
+  const Groups = db.collection("groups");
+  const Wishes = db.collection("wishes");
+  const Comments = db.collection("comments");
 
-  return db;
+  return { Users, Groups, Wishes, Comments };
 };
