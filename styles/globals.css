@@ -8,10 +8,13 @@ html {
 
 body {
   @apply bg-gray-300 h-full flex-grow flex flex-col items-center xl:py-5;
+  background-image: url("/background.jpg");
+  background-size: cover;
+  background-position: center;
 }
 
 main {
-  @apply flex flex-grow items-stretch w-full bg-white flex-wrap;
+  @apply flex flex-grow items-stretch w-full bg-white;
   max-width: 1600px;
 }
 
@@ -25,7 +28,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-weight: bold;
+  @apply font-medium;
 }
 
 form {
@@ -33,28 +36,12 @@ form {
   flex-direction: column;
 }
 
-#left-nav {
-  @apply flex flex-col;
-  flex: 0 0 30%;
-  max-width: 30%;
-  min-width: 300px;
-  @apply border-gray-300 border-r;
-}
-
-#right-nav {
-  @apply flex flex-col;
-  flex: 0 0 30%;
-  max-width: 30%;
-  min-width: 300px;
-  @apply border-gray-300 border-l bg-gray-200;
-}
-
 .nav-header {
-  @apply p-2 bg-gray-200 border-b border-gray-300;
+  @apply p-2 bg-rose-900 border-b border-rose-900 text-white;
 }
 
 input[type="text"],
 input[type="url"],
 textarea {
-  @apply p-1 border-gray-200 border flex-grow text-sm;
+  @apply p-1 border-gray-200 border flex-1 text-sm w-full;
 }
