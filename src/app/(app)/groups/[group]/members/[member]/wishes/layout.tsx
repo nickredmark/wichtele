@@ -89,6 +89,15 @@ const MemberLayout = async ({
                   <FaPencilAlt />
                 </a>
               )}
+              {wish.createdBy !== member._id && (
+                <span className="font-bold text-sm">
+                  {
+                    members.find((member) => member._id === wish.createdBy)
+                      ?.name
+                  }
+                  's proposal
+                </span>
+              )}
               <div>{wish.content}</div>
               <div className="my-2 border-gray-300 border-b">
                 {wish.comments.map((comment) => (
