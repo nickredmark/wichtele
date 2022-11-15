@@ -2,9 +2,10 @@
 
 import { useRouter } from "next/navigation";
 import { FC, useState } from "react";
+import { User } from "../config/models";
 import { Form } from "./form";
 
-export const CreateGroup: FC = () => {
+export const CreateGroup: FC<{ me: User }> = ({ me }) => {
   const router = useRouter();
   const [name, setName] = useState("");
 
@@ -23,7 +24,7 @@ export const CreateGroup: FC = () => {
         });
         const id = await res.json();
         setName("");
-        router.push(`groups/${id}/wishes`);
+        router.push(`groups/${id}/members/${me._id}/wishes`);
         router.refresh();
       }}
       canSubmit={!!name}

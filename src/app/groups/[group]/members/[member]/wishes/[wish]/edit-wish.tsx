@@ -30,8 +30,7 @@ export const EditWish: FC<{
         groups,
       }),
     });
-    setState(initialState);
-    router.refresh();
+    router.back();
   };
 
   return (

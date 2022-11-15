@@ -21,7 +21,6 @@ export const getData = async (groupId: string, wishId: string) => {
 
   const wish = (await Wishes.findOne<Wish>({
     _id: new ObjectId(wishId),
-    user: me._id,
     createdBy: me._id,
     groups: new ObjectId(groupId),
   }))!;

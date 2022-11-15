@@ -30,6 +30,7 @@ export const AddMember: FC<{ groupId: string }> = ({ groupId }) => {
         );
         await res2.json();
         setName("");
+        router.push(`/groups/${groupId}/members/${id}/wishes`);
         router.refresh();
       }}
       canSubmit={!!name}

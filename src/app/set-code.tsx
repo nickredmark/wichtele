@@ -1,10 +1,19 @@
 "use client";
 
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
+import { FaDoorOpen } from "react-icons/fa";
 import { Form } from "./form";
 
 export const SetCode: FC = () => {
   const [code, setCode] = useState("");
+
+  useEffect(() => {
+    const searchCode = new URLSearchParams(location.search).get("code");
+    if (searchCode) {
+      document.cookie = `code=${searchCode}`;
+      location.replace("/");
+    }
+  }, []);
 
   return (
     <Form
@@ -25,3 +34,14 @@ export const SetCode: FC = () => {
     </Form>
   );
 };
+
+export const Logout: FC = () => (
+  <button
+    onClick={() => {
+      document.cookie = `code=`;
+      location.replace("/");
+    }}
+  >
+    <FaDoorOpen />
+  </button>
+);

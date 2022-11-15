@@ -2,6 +2,8 @@ export type User = {
   _id: string;
   name: string;
   loggedIn?: boolean;
+  createdBy: string;
+  code?: string;
 
   wishes: Wish[];
   groups: Group[];

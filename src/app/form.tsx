@@ -77,7 +77,7 @@ export const Textarea: FC<
   <textarea
     {...props}
     onKeyDown={(e) => {
-      if (e.key === "Enter" && e.ctrlKey) {
+      if (e.key === "Enter" && !e.shiftKey) {
         e.preventDefault();
         onSubmit();
       }
