@@ -135,7 +135,7 @@ export const handleEntity = async (
         throw sendError(res, 400, "You cannot delete this entity.");
       }
       await cascade?.(entity);
-      await collection.deleteOne(entity._id);
+      await collection.deleteOne({ _id: entity._id });
       return entity._id;
     default:
       throw sendError(res, 400, "Unsupported method");

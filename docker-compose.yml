@@ -1,7 +1,7 @@
 version: "3.4"
 services:
   mongodb:
-    container_name: ${COMPOSE_PROJECT_NAME-wishes}_postgres
+    container_name: ${COMPOSE_PROJECT_NAME-wishes}_mongodb
     image: mongo:latest
     environment:
       MONGO_INITDB_ROOT_USERNAME: root

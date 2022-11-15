@@ -2,6 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  @apply h-full flex flex-col;
+}
+
+body {
+  @apply bg-gray-300 h-full flex-grow flex flex-col items-center xl:py-5;
+}
+
+main {
+  @apply flex flex-grow items-stretch w-full bg-white flex-wrap;
+  max-width: 1600px;
+}
+
+[data-nextjs-scroll-focus-boundary] {
+  display: contents;
+}
+
 h1,
 h2,
 h3,
@@ -11,10 +28,33 @@ h6 {
   font-weight: bold;
 }
 
-h1 {
-}
-
 form {
   display: flex;
   flex-direction: column;
+}
+
+#left-nav {
+  @apply flex flex-col;
+  flex: 0 0 30%;
+  max-width: 30%;
+  min-width: 300px;
+  @apply border-gray-300 border-r;
+}
+
+#right-nav {
+  @apply flex flex-col;
+  flex: 0 0 30%;
+  max-width: 30%;
+  min-width: 300px;
+  @apply border-gray-300 border-l bg-gray-200;
+}
+
+.nav-header {
+  @apply p-2 bg-gray-200 border-b border-gray-300;
+}
+
+input[type="text"],
+input[type="url"],
+textarea {
+  @apply p-1 border-gray-200 border flex-grow text-sm;
 }

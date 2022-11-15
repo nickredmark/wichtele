@@ -10,6 +10,7 @@ export const CreateGroup: FC = () => {
 
   return (
     <Form
+      className="flex flex-row p-2"
       onSubmit={async () => {
         const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/groups`, {
           method: "POST",
@@ -22,17 +23,18 @@ export const CreateGroup: FC = () => {
         });
         const id = await res.json();
         setName("");
-        router.push(`groups/${id}`);
+        router.push(`groups/${id}/wishes`);
         router.refresh();
       }}
       canSubmit={!!name}
       submitLabel="Create"
-      inline
     >
       <input
+        type="text"
+        className="flex-grow"
         value={name}
         onChange={(e) => setName(e.target.value)}
-        placeholder="Create new group"
+        placeholder="New group"
         required
       />
     </Form>

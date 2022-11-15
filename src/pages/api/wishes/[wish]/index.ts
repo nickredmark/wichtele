@@ -2,6 +2,7 @@ import Joi from "joi";
 import {
   handleEntity,
   NextApiHandlerWithContext,
+  TYPES,
   withContext,
 } from "../../../../services/api";
 
@@ -13,9 +14,8 @@ const handler: NextApiHandlerWithContext = async (
   handleEntity(req, res, Wishes, "wish", {
     canUpdate: async (wish) => wish.createdBy.equals(me._id),
     updateSchema: Joi.object({
-      name: Joi.string(),
-      description: Joi.string(),
-      url: Joi.string().uri(),
+      content: Joi.string(),
+      groups: Joi.array().items(TYPES.objectId).min(1),
     }),
     canDelete: async (wish) => {
       if (!wish.createdBy.equals(me._id)) {

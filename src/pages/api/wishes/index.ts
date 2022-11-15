@@ -9,14 +9,10 @@ import {
 const handler: NextApiHandlerWithContext = async (req, res, ctx) =>
   createEntity(req, res, ctx, ctx.Wishes, {
     schema: Joi.object({
-      name: Joi.string().required(),
-      description: Joi.string(),
-      url: Joi.string().uri(),
+      content: Joi.string().required(),
       user: TYPES.objectId.default(ctx.me._id),
+      groups: Joi.array().required().items(TYPES.objectId).min(1),
     }),
-    data: {
-      groups: [],
-    },
   });
 
 export default withContext(handler);

@@ -8,15 +8,16 @@ export const SetCode: FC = () => {
 
   return (
     <Form
+      className="flex flex-row"
       onSubmit={() => {
         document.cookie = `code=${code}`;
         location.reload();
       }}
       canSubmit={!!code}
       submitLabel="Send"
-      inline
     >
       <input
+        type="text"
         value={code}
         onChange={(e) => setCode(e.target.value)}
         placeholder="Enter code"

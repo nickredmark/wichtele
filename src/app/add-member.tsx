@@ -4,16 +4,15 @@ import { useRouter } from "next/navigation";
 import { FC, useState } from "react";
 import { Form } from "./form";
 
-export const CreateWish: FC = () => {
+export const AddMember: FC<{ groupId: string }> = ({ groupId }) => {
   const router = useRouter();
   const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [url, setUrl] = useState("");
 
   return (
     <Form
+      className="flex flex-row p-2 pl-4"
       onSubmit={async () => {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/wishes`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users`, {
           method: "POST",
           headers: {
             "content-type": "application/json",
@@ -23,28 +22,25 @@ export const CreateWish: FC = () => {
           }),
         });
         const id = await res.json();
+        const res2 = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/groups/${groupId}/members/${id}`,
+          {
+            method: "PUT",
+          }
+        );
+        await res2.json();
         setName("");
-        router.push(`wishes/${id}`);
         router.refresh();
       }}
       canSubmit={!!name}
-      submitLabel="Create"
+      submitLabel="Add"
     >
       <input
+        type="text"
         value={name}
         onChange={(e) => setName(e.target.value)}
-        placeholder="Wish"
+        placeholder="New member name"
         required
-      />
-      <textarea
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
-        placeholder="Description"
-      />
-      <input
-        value={url}
-        onChange={(e) => setUrl(e.target.value)}
-        placeholder="URL"
       />
     </Form>
   );
