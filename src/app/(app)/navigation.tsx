@@ -3,10 +3,10 @@
 import { useRouter, useSelectedLayoutSegments } from "next/navigation";
 import { FC, useEffect, useState } from "react";
 import { FaChevronDown, FaChevronRight, FaCopy, FaUser } from "react-icons/fa";
+import { AddMember } from "../../components/add-member";
+import { Column } from "../../components/column";
+import { CreateGroup } from "../../components/create-group";
 import { User } from "../../config/models";
-import { AddMember } from "./add-member";
-import { Column } from "./column";
-import { CreateGroup } from "./create-group";
 
 export const Navigation = ({ me }: { me: User }) => {
   const segments = useSelectedLayoutSegments();
@@ -48,7 +48,7 @@ export const Navigation = ({ me }: { me: User }) => {
             <div key={group._id} className="border-gray-300 border-b">
               <h2>
                 <a
-                  href={active ? "/" : `/groups/${group._id}`}
+                  href={`/groups/${group._id}`}
                   className={`p-2 flex flex-row items-center ${
                     active ? "bg-gray-100" : "hover:bg-gray-100"
                   }`}
@@ -69,7 +69,7 @@ export const Navigation = ({ me }: { me: User }) => {
                       }`}
                     >
                       <a
-                        href={`/groups/${group._id}/members/${member._id}/wishes`}
+                        href={`/groups/${group._id}/members/${member._id}`}
                         className="flex flex-col p-2 pl-4"
                       >
                         <h2>
@@ -101,7 +101,9 @@ export const Navigation = ({ me }: { me: User }) => {
 };
 
 const Code: FC<{ code: string }> = ({ code }) => {
+  const url = `${location.origin}/?code=${code}`;
   const [copied, setCopied] = useState(false);
+  const [open, setOpen] = useState(false);
 
   return (
     <button
@@ -109,13 +111,27 @@ const Code: FC<{ code: string }> = ({ code }) => {
       onBlur={() => setCopied(false)}
       onClick={(e) => {
         e.preventDefault();
-        navigator.clipboard.writeText(`${location.origin}/?code=${code}`);
-        setCopied(true);
+        if (navigator.clipboard) {
+          navigator.clipboard.writeText(url);
+          setCopied(true);
+        } else {
+          setOpen(true);
+        }
       }}
     >
       <span>invite link</span>
       <FaCopy />
       {copied && <div className="absolute top-full">Copied!</div>}
+      {open && (
+        <input
+          onBlur={() => setOpen(false)}
+          autoFocus
+          onFocus={(e) => e.target.select()}
+          readOnly
+          className="absolute top-full"
+          value={url}
+        />
+      )}
     </button>
   );
 };

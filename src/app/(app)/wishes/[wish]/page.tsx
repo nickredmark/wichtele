@@ -1,10 +1,10 @@
 import { ObjectId } from "mongodb";
+import { Column } from "../../../../components/column";
 import { Group, Wish } from "../../../../config/models";
 import { getDb } from "../../../../services/db";
 import { getMe } from "../../../../utils/data";
 import { serialize } from "../../../../utils/objects";
-import { Column } from "../../column";
-import { EditWish } from "../../groups/[group]/members/[member]/wishes/[wish]/edit-wish";
+import { EditWish } from "./edit-wish";
 
 export const getData = async (wishId: string) => {
   const { Groups, Wishes } = await getDb();
@@ -37,7 +37,7 @@ const WishPage = async ({
 }) => {
   const { groups, wish } = await getData(wishId);
   return (
-    <Column className="bg-gray-200 sm:max-w-sm">
+    <Column className="bg-rose-100 sm:max-w-sm">
       <h2 className="nav-header">Edit Wish</h2>
       <EditWish initialState={wish} availableGroups={groups} />
     </Column>

@@ -14,7 +14,7 @@ body {
 }
 
 main {
-  @apply flex flex-grow items-stretch w-full bg-white;
+  @apply h-full flex flex-grow items-stretch w-full bg-white overflow-hidden;
   max-width: 1600px;
 }
 
@@ -52,6 +52,10 @@ textarea {
 
 .markdown p {
   margin-bottom: 8px;
+}
+
+.markdown p:last-child {
+  margin-bottom: 0;
 }
 
 .link {

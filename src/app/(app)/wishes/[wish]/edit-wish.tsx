@@ -3,8 +3,8 @@
 import { union, without } from "lodash";
 import { useRouter } from "next/navigation";
 import { FC, PropsWithChildren, useState } from "react";
-import { Group } from "../../../../../../../../config/models";
-import { Form, Textarea } from "../../../../../../form";
+import { Form, Textarea } from "../../../../components/form";
+import { Group } from "../../../../config/models";
 
 type State = {
   _id: string;

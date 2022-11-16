@@ -3,9 +3,10 @@
 import { useRouter } from "next/navigation";
 import { FC, useState } from "react";
 import { FaPaperPlane } from "react-icons/fa";
-import { Form, Textarea } from "../../../../../form";
+import { Form, Textarea } from "./form";
 
-export const AddComment: FC<{ wish: string; group: string }> = ({
+export const AddComment: FC<{ mine: boolean; wish: string; group: string }> = ({
+  mine,
   wish,
   group,
 }) => {
@@ -40,7 +41,7 @@ export const AddComment: FC<{ wish: string; group: string }> = ({
         onSubmit={onSubmit}
         value={content}
         onChange={(e) => setContent(e.target.value)}
-        placeholder="Secret comment"
+        placeholder={mine ? "Comment" : "Secret comment"}
         required
       />
     </Form>

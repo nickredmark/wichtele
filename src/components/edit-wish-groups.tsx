@@ -3,8 +3,8 @@
 import { union, without } from "lodash";
 import { useRouter } from "next/navigation";
 import { FC } from "react";
-import { Group } from "../../../../../../../config/models";
-import { Pill } from "./[wish]/edit-wish";
+import { Pill } from "../app/(app)/wishes/[wish]/edit-wish";
+import { Group } from "../config/models";
 
 export const EditWishGroups: FC<{
   id: string;

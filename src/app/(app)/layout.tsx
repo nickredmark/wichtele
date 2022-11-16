@@ -2,11 +2,11 @@ import { maxBy, orderBy } from "lodash";
 import { ObjectId } from "mongodb";
 import { cookies } from "next/headers";
 import { ReactNode } from "react";
+import { SetCode } from "../../components/set-code";
 import { Comment, Group, User, Wish } from "../../config/models";
 import { getDb } from "../../services/db";
 import { serialize } from "../../utils/objects";
 import { Navigation } from "./navigation";
-import { SetCode } from "./set-code";
 
 export const getData = async (): Promise<User | null> => {
   const nextCookies = cookies();

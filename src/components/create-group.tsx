@@ -2,17 +2,18 @@
 
 import { useRouter } from "next/navigation";
 import { FC, useState } from "react";
+import { User } from "../config/models";
 import { Form } from "./form";
 
-export const AddMember: FC<{ groupId: string }> = ({ groupId }) => {
+export const CreateGroup: FC<{ me: User }> = ({ me }) => {
   const router = useRouter();
   const [name, setName] = useState("");
 
   return (
     <Form
-      className="flex flex-row p-2 pl-4"
+      className="flex flex-row p-2"
       onSubmit={async () => {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/groups`, {
           method: "POST",
           headers: {
             "content-type": "application/json",
@@ -22,25 +23,19 @@ export const AddMember: FC<{ groupId: string }> = ({ groupId }) => {
           }),
         });
         const id = await res.json();
-        const res2 = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/groups/${groupId}/members/${id}`,
-          {
-            method: "PUT",
-          }
-        );
-        await res2.json();
         setName("");
-        router.push(`/groups/${groupId}/members/${id}/wishes`);
+        router.push(`groups/${id}/members/${me._id}`);
         router.refresh();
       }}
       canSubmit={!!name}
-      submitLabel="Add"
+      submitLabel="Create"
     >
       <input
         type="text"
+        className="flex-grow"
         value={name}
         onChange={(e) => setName(e.target.value)}
-        placeholder="New member name"
+        placeholder="New group"
         required
       />
     </Form>

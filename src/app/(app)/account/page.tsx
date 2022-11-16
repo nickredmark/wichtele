@@ -1,9 +1,9 @@
 import { cookies } from "next/headers";
 import { FaArrowLeft } from "react-icons/fa";
+import { Column } from "../../../components/column";
 import { User } from "../../../config/models";
 import { getDb } from "../../../services/db";
 import { serialize } from "../../../utils/objects";
-import { Column } from "../column";
 import { EditProfile } from "./edit-profile";
 
 export const getData = async () => {

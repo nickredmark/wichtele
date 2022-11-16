@@ -3,9 +3,9 @@
 import { union, without } from "lodash";
 import { useRouter } from "next/navigation";
 import { FC, useState } from "react";
-import { Group, User } from "../../../../../../../config/models";
-import { Form, Textarea } from "../../../../../form";
-import { Pill } from "./[wish]/edit-wish";
+import { Pill } from "../app/(app)/wishes/[wish]/edit-wish";
+import { Group, User } from "../config/models";
+import { Form, Textarea } from "./form";
 
 type State = {
   content: string;
@@ -37,7 +37,7 @@ export const CreateWish: FC<{
   };
 
   return (
-    <>
+    <div className="p-2 bg-white border-t border-rose-200">
       <Form
         onSubmit={onSubmit}
         canSubmit={!!content && groups.length > 0}
@@ -53,7 +53,7 @@ export const CreateWish: FC<{
             }
             onSubmit={onSubmit}
             placeholder={
-              user ? `Surprise gift idea for ${user.name}` : "New Wish"
+              user ? `Propose a gift idea for ${user.name}` : "New Wish"
             }
           />
           {availableGroups && availableGroups.length > 0 && (
@@ -78,6 +78,6 @@ export const CreateWish: FC<{
           )}
         </div>
       </Form>
-    </>
+    </div>
   );
 };

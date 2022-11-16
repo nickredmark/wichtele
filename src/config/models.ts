@@ -22,6 +22,7 @@ export type Wish = {
   content: string;
   groups: string[];
   reserved: boolean;
+  user: string;
   createdBy: string;
   createdAt: string;
 
