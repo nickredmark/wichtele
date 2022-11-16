@@ -59,6 +59,7 @@ export const AddMember: FC<{
             )
             .map((user) => (
               <button
+                key={user._id}
                 className="hover:bg-gray-100 p-1 text-left"
                 onClick={async () => {
                   await fetch(
