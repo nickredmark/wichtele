@@ -19,7 +19,7 @@ const Profile = async () => {
   const me = await getData();
 
   return (
-    <Column>
+    <Column paper={false}>
       <h2 className="nav-header flex items-stretch space-x-1">
         <a href="/" className="p-1 sm:hidden">
           <FaArrowLeft />

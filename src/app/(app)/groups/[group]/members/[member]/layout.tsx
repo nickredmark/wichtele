@@ -94,15 +94,12 @@ const MemberLayout = async ({
 
   return (
     <>
-      <Column className="bg-rose-100">
+      <Column>
         <h2 className="nav-header flex items-stretch space-x-1">
-          <a href={`/groups/${groupId}`} className="p-1 sm:hidden">
+          <a href="/" className="p-1 sm:hidden">
             <FaArrowLeft />
           </a>
-          <span className="flex-grow">
-            {me._id === memberId ? "Your wishes" : `${member.name}'s wishes`}{" "}
-            shared with {group.name}
-          </span>
+          <span className="flex-grow">{member.name}</span>
         </h2>
         <WishesComponent>
           {member.wishes.map((wish) => (

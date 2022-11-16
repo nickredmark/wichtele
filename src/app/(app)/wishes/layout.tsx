@@ -41,9 +41,9 @@ const WishesPage = async ({ children }: { children: ReactNode }) => {
 
   return (
     <>
-      <Column className="bg-rose-100">
+      <Column>
         <h2 className="nav-header flex items-stretch space-x-1">
-          <a href="/account" className="p-1 sm:hidden">
+          <a href="/" className="p-1 sm:hidden">
             <FaArrowLeft />
           </a>
           <span>All your wishes</span>

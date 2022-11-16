@@ -37,7 +37,7 @@ const WishPage = async ({
 }) => {
   const { groups, wish } = await getData(wishId);
   return (
-    <Column className="bg-rose-100 sm:max-w-sm">
+    <Column className="sm:max-w-sm">
       <h2 className="nav-header">Edit Wish</h2>
       <EditWish initialState={wish} availableGroups={groups} />
     </Column>

@@ -13,6 +13,12 @@ body {
   background-position: center;
 }
 
+.paper {
+  background-image: url("/paper.jpg");
+  background-size: cover;
+  background-position: center;
+}
+
 main {
   @apply h-full flex flex-grow items-stretch w-full bg-white overflow-hidden;
   max-width: 1600px;

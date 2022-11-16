@@ -23,14 +23,13 @@ export const AddMember: FC<{ groupId: string }> = ({ groupId }) => {
         });
         const id = await res.json();
         const res2 = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/groups/members/${groupId}/${id}`,
+          `${process.env.NEXT_PUBLIC_API_URL}/groups/${groupId}/members/${id}`,
           {
             method: "PUT",
           }
         );
         await res2.json();
         setName("");
-        router.push(`/groups/${groupId}/members/${id}`);
         router.refresh();
       }}
       canSubmit={!!name}

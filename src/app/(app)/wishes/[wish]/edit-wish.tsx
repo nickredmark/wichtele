@@ -4,6 +4,7 @@ import { union, without } from "lodash";
 import { useRouter } from "next/navigation";
 import { FC, PropsWithChildren, useState } from "react";
 import { Form, Textarea } from "../../../../components/form";
+import { WishComponent } from "../../../../components/wish";
 import { Group } from "../../../../config/models";
 
 type State = {
@@ -34,55 +35,57 @@ export const EditWish: FC<{
   };
 
   return (
-    <>
-      <Form
-        onSubmit={onSubmit}
-        canSubmit={!!content && groups.length > 0}
-        deleteLabel="Delete"
-        onDelete={async () => {
-          await fetch(`${process.env.NEXT_PUBLIC_API_URL}/wishes/${_id}`, {
-            method: "DELETE",
-            headers: {
-              "content-type": "application/json",
-            },
-          });
-          router.back();
-        }}
-        cancelLabel="Cancel"
-        onCancel={() => router.back()}
-        submitLabel="Save"
-        className="flex flex-col p-2 items-stretch"
-      >
-        <Textarea
-          value={content}
-          onChange={(e) =>
-            setState((state) => ({ ...state, content: e.target.value }))
-          }
+    <div className="p-2">
+      <WishComponent>
+        <Form
           onSubmit={onSubmit}
-          placeholder="New Wish"
-        />
-        {availableGroups.length > 0 && (
-          <div className="flex flex-row flex-wrap mt-2 space-x-1 items-center">
-            {availableGroups.map(({ _id, name }) => (
-              <Pill
-                key={_id}
-                selected={!!groups.includes(_id)}
-                setSelected={(selected) =>
-                  setState(({ groups, ...state }) => ({
-                    ...state,
-                    groups: selected
-                      ? union(groups, [_id])
-                      : without(groups, _id),
-                  }))
-                }
-              >
-                {name}
-              </Pill>
-            ))}
-          </div>
-        )}
-      </Form>
-    </>
+          canSubmit={!!content && groups.length > 0}
+          deleteLabel="Delete"
+          onDelete={async () => {
+            await fetch(`${process.env.NEXT_PUBLIC_API_URL}/wishes/${_id}`, {
+              method: "DELETE",
+              headers: {
+                "content-type": "application/json",
+              },
+            });
+            router.back();
+          }}
+          cancelLabel="Cancel"
+          onCancel={() => router.back()}
+          submitLabel="Save"
+          className="flex flex-col items-stretch"
+        >
+          <Textarea
+            value={content}
+            onChange={(e) =>
+              setState((state) => ({ ...state, content: e.target.value }))
+            }
+            onSubmit={onSubmit}
+            placeholder="New Wish"
+          />
+          {availableGroups.length > 0 && (
+            <div className="flex flex-row flex-wrap mt-2 space-x-1 items-center">
+              {availableGroups.map(({ _id, name }) => (
+                <Pill
+                  key={_id}
+                  selected={!!groups.includes(_id)}
+                  setSelected={(selected) =>
+                    setState(({ groups, ...state }) => ({
+                      ...state,
+                      groups: selected
+                        ? union(groups, [_id])
+                        : without(groups, _id),
+                    }))
+                  }
+                >
+                  {name}
+                </Pill>
+              ))}
+            </div>
+          )}
+        </Form>
+      </WishComponent>
+    </div>
   );
 };
 
@@ -99,8 +102,8 @@ export const Pill: FC<
     }}
     className={`rounded-2xl px-2 text-sm ${
       selected
-        ? "border border-gray-500 bg-gray-500 text-white"
-        : "border border-gray-300 text-gray-500 hover:bg-gray-300"
+        ? "border border-gray-400 bg-gray-400 text-white"
+        : "border border-gray-100 text-gray-400 hover:bg-gray-100"
     }`}
   >
     {children}
