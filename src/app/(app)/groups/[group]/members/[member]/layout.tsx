@@ -1,5 +1,6 @@
 import { orderBy } from "lodash";
 import { ObjectId } from "mongodb";
+import { redirect } from "next/navigation";
 import { ReactNode } from "react";
 import { FaArrowLeft, FaPencilAlt } from "react-icons/fa";
 import { AddComment } from "../../../../../../components/add-comment";
@@ -46,7 +47,7 @@ const getData = async (groupId: string, memberId: string) => {
   );
 
   if (!member) {
-    throw new Error("Not found");
+    redirect("");
   }
 
   member.wishes = await Wishes.find<Wish>({

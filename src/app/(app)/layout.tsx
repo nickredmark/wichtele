@@ -1,4 +1,4 @@
-import { maxBy, orderBy } from "lodash";
+import { flatMap, maxBy, orderBy, uniqBy } from "lodash";
 import { ObjectId } from "mongodb";
 import { cookies } from "next/headers";
 import { ReactNode } from "react";
@@ -8,7 +8,7 @@ import { getDb } from "../../services/db";
 import { serialize } from "../../utils/objects";
 import { Navigation } from "./navigation";
 
-const getData = async (): Promise<User | null> => {
+const getData = async () => {
   const nextCookies = cookies();
   const code = nextCookies.get("code")?.value;
   if (!code) {
@@ -41,14 +41,20 @@ const getData = async (): Promise<User | null> => {
     await Users.updateOne({ _id: me._id }, { $set: { loggedIn: true } });
   }
 
-  me.groups = await Groups.find<Group>({
-    members: new ObjectId(me._id),
-  }).toArray();
+  me.groups = serialize(
+    await Groups.find<Group>({
+      members: new ObjectId(me._id),
+    }).toArray()
+  );
 
   for (const group of me.groups) {
     group.members = serialize(
       await Users.find<User>({
-        _id: { $in: group.members },
+        _id: {
+          $in: (group.members as unknown as string[]).map(
+            (id) => new ObjectId(id)
+          ),
+        },
       }).toArray()
     ).map(({ _id, name, code, createdBy, loggedIn, ...rest }) => ({
       _id,
@@ -61,25 +67,29 @@ const getData = async (): Promise<User | null> => {
     for (const member of group.members) {
       const candidates: (Wish | Comment)[] = [];
 
-      const wishes = await Wishes.find<Wish>({
-        user: new ObjectId(member._id),
-        groups: new ObjectId(group._id),
-        ...(me._id === member._id && {
-          createdBy: new ObjectId(me._id),
-        }),
-      }).toArray();
+      const wishes = serialize(
+        await Wishes.find<Wish>({
+          user: new ObjectId(member._id),
+          groups: new ObjectId(group._id),
+          ...(me._id === member._id && {
+            createdBy: new ObjectId(me._id),
+          }),
+        }).toArray()
+      );
       candidates.push(...wishes);
 
       for (const wish of wishes) {
-        const lastComment = await Comments.findOne<Comment>(
-          {
-            wish: new ObjectId(wish._id),
-            group: new ObjectId(group._id),
-            ...(me._id === member._id && {
-              createdBy: new ObjectId(me._id),
-            }),
-          },
-          { sort: { createdAt: "desc" } }
+        const lastComment = serialize(
+          await Comments.findOne<Comment>(
+            {
+              wish: new ObjectId(wish._id),
+              group: new ObjectId(group._id),
+              ...(me._id === member._id && {
+                createdBy: new ObjectId(me._id),
+              }),
+            },
+            { sort: { createdAt: "desc" } }
+          )
         );
         if (lastComment) {
           candidates.push(lastComment);
@@ -98,19 +108,21 @@ const getData = async (): Promise<User | null> => {
     );
   }
 
-  return serialize(me);
+  const users = uniqBy(flatMap(me.groups.map((group) => group.members)), "_id");
+
+  return { me, users };
 };
 
 const RootLayout = async ({ children }: { children: ReactNode }) => {
-  const me = await getData();
+  const data = await getData();
 
-  if (!me) {
+  if (!data) {
     return <SetCode />;
   }
 
   return (
     <main>
-      <Navigation me={me} />
+      <Navigation me={data.me} users={data.users} />
       {children}
     </main>
   );

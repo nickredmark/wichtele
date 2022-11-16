@@ -2,14 +2,20 @@
 
 import { useRouter, useSelectedLayoutSegments } from "next/navigation";
 import { FC, useEffect, useState } from "react";
-import { FaChevronDown, FaChevronRight, FaCopy, FaUser } from "react-icons/fa";
+import {
+  FaChevronDown,
+  FaChevronRight,
+  FaCopy,
+  FaTrash,
+  FaUser,
+} from "react-icons/fa";
 import { AddMember } from "../../components/add-member";
 import { Column } from "../../components/column";
 import { CreateGroup } from "../../components/create-group";
 import { Markdown } from "../../components/markdown";
 import { Group, User } from "../../config/models";
 
-export const Navigation = ({ me }: { me: User }) => {
+export const Navigation = ({ me, users }: { me: User; users: User[] }) => {
   const segments = useSelectedLayoutSegments();
   const router = useRouter();
 
@@ -48,6 +54,7 @@ export const Navigation = ({ me }: { me: User }) => {
               key={group._id}
               me={me}
               group={group}
+              users={users}
               segments={segments}
               first={i === 0}
             />
@@ -62,9 +69,10 @@ export const Navigation = ({ me }: { me: User }) => {
 const GroupComponent: FC<{
   me: User;
   group: Group;
+  users: User[];
   segments: string[];
   first?: boolean;
-}> = ({ me, group, segments, first }) => {
+}> = ({ me, group, users, segments, first }) => {
   {
     const [toggled, setToggled] = useState(
       first || (segments[0] === "groups" && segments[1] === group._id)
@@ -97,7 +105,7 @@ const GroupComponent: FC<{
                   <h2>
                     <span className="flex-grow">{member.name}</span>
                   </h2>
-                  {member.code && <Code code={member.code} />}
+                  {member.code && <Code id={member._id} code={member.code} />}
                   {member.lastActivity && (
                     <span className="text-sm text-gray-500 break-words">
                       <Markdown strip>
@@ -109,7 +117,13 @@ const GroupComponent: FC<{
               </div>
             ))}
             <div className="border-t border-gray-200">
-              {group.createdBy === me._id && <AddMember groupId={group._id} />}
+              {group.createdBy === me._id && (
+                <AddMember
+                  groupId={group._id}
+                  members={group.members}
+                  users={users}
+                />
+              )}
             </div>
           </>
         )}
@@ -118,10 +132,11 @@ const GroupComponent: FC<{
   }
 };
 
-const Code: FC<{ code: string }> = ({ code }) => {
+const Code: FC<{ id: string; code: string }> = ({ id, code }) => {
   const [url, setUrl] = useState<string>();
   const [copied, setCopied] = useState(false);
   const [open, setOpen] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     setUrl(`${location.origin}/?code=${code}`);
@@ -133,25 +148,42 @@ const Code: FC<{ code: string }> = ({ code }) => {
 
   return (
     <>
-      <button
-        className="flex flex-row space-x-1 items-center text-xs text-gray-500 absolute right-2 top-2"
-        onBlur={() => setCopied(false)}
-        onClick={(e) => {
-          e.preventDefault();
-          if (navigator.clipboard) {
-            navigator.clipboard.writeText(url);
-            setCopied(true);
-          } else {
-            setOpen(true);
-          }
-        }}
-      >
-        <span>invite link</span>
-        <FaCopy />
-        {copied && <div className="absolute top-full">Copied!</div>}
-      </button>
+      <div className="text-xs text-gray-500 flex flex-row absolute top-3 right-2 space-x-2">
+        <button
+          className="flex flex-row space-x-1 items-center"
+          onBlur={() => setCopied(false)}
+          onClick={(e) => {
+            e.preventDefault();
+            if (navigator.clipboard) {
+              navigator.clipboard.writeText(url);
+              setCopied(true);
+            } else {
+              setOpen(true);
+            }
+          }}
+        >
+          <span>invite link</span>
+          <FaCopy />
+          {copied && <div className="absolute top-full">Copied!</div>}
+        </button>
+        <button
+          onClick={async () => {
+            await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/${id}`, {
+              method: "DELETE",
+            });
+            router.refresh();
+          }}
+        >
+          <FaTrash />
+        </button>
+      </div>
       {open && (
         <input
+          onKeyDown={(e) => {
+            if (e.key === "Escape") {
+              setOpen(false);
+            }
+          }}
           onBlur={() => setOpen(false)}
           autoFocus
           onFocus={(e) => e.target.select()}
