@@ -40,7 +40,7 @@ export const CreateWish: FC<{
     <div className="p-2 bg-white border-t border-rose-200">
       <Form
         onSubmit={onSubmit}
-        canSubmit={!!content && groups.length > 0}
+        canSubmit={!!content}
         onCancel={() => router.back()}
         submitLabel={user ? "Propose" : "Create"}
         className="flex flex-row space-x-1"

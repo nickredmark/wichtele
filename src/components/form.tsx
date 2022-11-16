@@ -27,7 +27,7 @@ export const Form: FC<
   cancelLabel,
   onCancel,
   submitLabel,
-  onSubmit,
+  onSubmit = true,
   children,
 }) => (
   <form

@@ -7,6 +7,7 @@ import { Column } from "../../../../../../components/column";
 import { Comments } from "../../../../../../components/comments";
 import { CreateWish } from "../../../../../../components/create-wish";
 import { EditWishGroups } from "../../../../../../components/edit-wish-groups";
+import { Elf } from "../../../../../../components/elf";
 import { Markdown } from "../../../../../../components/markdown";
 import { WishComponent } from "../../../../../../components/wish";
 import { WishesComponent } from "../../../../../../components/wishes";
@@ -99,43 +100,47 @@ const MemberLayout = async ({
           <span className="flex-grow">{member.name}</span>
         </h2>
         <WishesComponent>
-          {member.wishes.map((wish) => (
-            <WishComponent key={wish._id}>
-              {wish.createdBy === me._id && (
-                <a
-                  href={`/groups/${groupId}/members/${member._id}/${wish._id}`}
-                  className="float-right"
-                >
-                  <FaPencilAlt />
-                </a>
-              )}
-              {wish.createdBy !== member._id && (
-                <span className="font-bold text-sm">
-                  {
-                    members.find((member) => member._id === wish.createdBy)
-                      ?.name
-                  }
-                  {"'s proposal"}
-                </span>
-              )}
-              <div>
-                <Markdown>{wish.content}</Markdown>
-              </div>
-              {wish.createdBy === me._id && (
-                <EditWishGroups
-                  id={wish._id}
-                  groups={wish.groups}
-                  availableGroups={groups}
+          {member.wishes.length ? (
+            member.wishes.map((wish) => (
+              <WishComponent key={wish._id}>
+                {wish.createdBy === me._id && (
+                  <a
+                    href={`/groups/${groupId}/members/${member._id}/${wish._id}`}
+                    className="float-right"
+                  >
+                    <FaPencilAlt />
+                  </a>
+                )}
+                {wish.createdBy !== member._id && (
+                  <span className="font-bold text-sm">
+                    {
+                      members.find((member) => member._id === wish.createdBy)
+                        ?.name
+                    }
+                    {"'s proposal"}
+                  </span>
+                )}
+                <div>
+                  <Markdown>{wish.content}</Markdown>
+                </div>
+                {wish.createdBy === me._id && (
+                  <EditWishGroups
+                    id={wish._id}
+                    groups={wish.groups}
+                    availableGroups={groups}
+                  />
+                )}
+                <Comments comments={wish.comments} users={members} />
+                <AddComment
+                  mine={wish.user === me._id}
+                  group={groupId}
+                  wish={wish._id}
                 />
-              )}
-              <Comments comments={wish.comments} users={members} />
-              <AddComment
-                mine={wish.user === me._id}
-                group={groupId}
-                wish={wish._id}
-              />
-            </WishComponent>
-          ))}
+              </WishComponent>
+            ))
+          ) : (
+            <Elf />
+          )}
         </WishesComponent>
         <CreateWish
           user={member._id !== me._id ? member : undefined}

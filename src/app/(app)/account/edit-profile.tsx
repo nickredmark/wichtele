@@ -1,27 +1,40 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { FC, useState } from "react";
 import { Form } from "../../../components/form";
 import { User } from "../../../config/models";
 
 export const EditProfile: FC<{ me: User }> = ({ me }) => {
-  const [username, setUsername] = useState(me.name);
+  const [name, setName] = useState(me.name);
+  const router = useRouter();
 
   return (
     <Form
-      onSubmit={() => {}}
+      onSubmit={async () => {
+        await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/${me._id}`, {
+          method: "PUT",
+          headers: {
+            "content-type": "application/json",
+          },
+          body: JSON.stringify({
+            name,
+          }),
+        });
+        router.refresh();
+      }}
       cancelLabel="Cancel"
-      onCancel={() => setUsername(me.name)}
+      onCancel={() => setName(me.name)}
       submitLabel="Save"
       className="flex flex-col p-2 items-stretch space-y-2"
     >
       <div className="flex flex-row space-x-1 items-center">
-        <label className="w-32 text-sm font-medium">Username</label>
+        <label className="w-32 text-sm font-medium">Name</label>
         <input
           type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          placeholder="Will Ferrell"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
         />
       </div>
     </Form>

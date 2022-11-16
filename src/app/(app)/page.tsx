@@ -1,5 +1,10 @@
 import { Column } from "../../components/column";
+import { Elf } from "../../components/elf";
 
-const Page = () => <Column></Column>;
+const Page = () => (
+  <Column showWithSegments={[]}>
+    <Elf />
+  </Column>
+);
 
 export default Page;

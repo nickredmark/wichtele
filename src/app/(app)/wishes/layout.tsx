@@ -4,6 +4,7 @@ import { FaArrowLeft, FaPencilAlt } from "react-icons/fa";
 import { Column } from "../../../components/column";
 import { CreateWish } from "../../../components/create-wish";
 import { EditWishGroups } from "../../../components/edit-wish-groups";
+import { Elf } from "../../../components/elf";
 import { Markdown } from "../../../components/markdown";
 import { WishComponent } from "../../../components/wish";
 import { WishesComponent } from "../../../components/wishes";
@@ -29,7 +30,7 @@ const getData = async () => {
       user: new ObjectId(me._id),
       createdBy: new ObjectId(me._id),
     })
-      .sort("createdAt", "desc")
+      .sort("createdAt", "asc")
       .toArray()
   );
 
@@ -49,21 +50,25 @@ const WishesPage = async ({ children }: { children: ReactNode }) => {
           <span>All your wishes</span>
         </h2>
         <WishesComponent>
-          {wishes.map((wish) => (
-            <WishComponent key={wish._id}>
-              <a href={`/wishes/${wish._id}`} className="float-right">
-                <FaPencilAlt />
-              </a>
-              <div>
-                <Markdown>{wish.content}</Markdown>
-              </div>
-              <EditWishGroups
-                id={wish._id}
-                groups={wish.groups}
-                availableGroups={groups}
-              />
-            </WishComponent>
-          ))}
+          {wishes.length ? (
+            wishes.map((wish) => (
+              <WishComponent key={wish._id}>
+                <a href={`/wishes/${wish._id}`} className="float-right">
+                  <FaPencilAlt />
+                </a>
+                <div>
+                  <Markdown>{wish.content}</Markdown>
+                </div>
+                <EditWishGroups
+                  id={wish._id}
+                  groups={wish.groups}
+                  availableGroups={groups}
+                />
+              </WishComponent>
+            ))
+          ) : (
+            <Elf />
+          )}
         </WishesComponent>
         <CreateWish
           initialState={{

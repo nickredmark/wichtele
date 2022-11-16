@@ -7,6 +7,7 @@ import { Column } from "../../../../../components/column";
 import { Comments } from "../../../../../components/comments";
 import { CreateWish } from "../../../../../components/create-wish";
 import { EditWishGroups } from "../../../../../components/edit-wish-groups";
+import { Elf } from "../../../../../components/elf";
 import { Markdown } from "../../../../../components/markdown";
 import { WishComponent } from "../../../../../components/wish";
 import { WishesComponent } from "../../../../../components/wishes";
@@ -97,64 +98,68 @@ const GroupPage = async ({
           <span className="flex-grow">{group.name}</span>
         </h2>
         <WishesComponent>
-          {wishes.map((wish) => (
-            <WishComponent key={wish._id}>
-              {wish.createdBy === me._id && (
-                <a
-                  href={`/groups/${groupId}/${wish._id}`}
-                  className="float-right"
-                >
-                  <FaPencilAlt />
-                </a>
-              )}
-              {wish.createdBy === wish.user ? (
-                <span className="text-sm">
-                  <span className="font-bold">
-                    {
-                      group.members.find(
-                        (member) => member._id === wish.createdBy
-                      )?.name
-                    }
-                  </span>{" "}
-                  wishes:
-                </span>
-              ) : (
-                <span className="text-sm">
-                  <span className="font-bold">
-                    {
-                      group.members.find(
-                        (member) => member._id === wish.createdBy
-                      )?.name
-                    }
-                  </span>{" "}
-                  proposes for{" "}
-                  <span className="font-bold">
-                    {
-                      group.members.find((member) => member._id === wish.user)
-                        ?.name
-                    }
+          {wishes.length ? (
+            wishes.map((wish) => (
+              <WishComponent key={wish._id}>
+                {wish.createdBy === me._id && (
+                  <a
+                    href={`/groups/${groupId}/${wish._id}`}
+                    className="float-right"
+                  >
+                    <FaPencilAlt />
+                  </a>
+                )}
+                {wish.createdBy === wish.user ? (
+                  <span className="text-sm">
+                    <span className="font-bold">
+                      {
+                        group.members.find(
+                          (member) => member._id === wish.createdBy
+                        )?.name
+                      }
+                    </span>{" "}
+                    wishes:
                   </span>
-                  :
-                </span>
-              )}
-              <div>
-                <Markdown>{wish.content}</Markdown>
-              </div>
-              {wish.createdBy === me._id && (
-                <EditWishGroups
-                  id={wish._id}
-                  groups={wish.groups}
-                  availableGroups={groups}
+                ) : (
+                  <span className="text-sm">
+                    <span className="font-bold">
+                      {
+                        group.members.find(
+                          (member) => member._id === wish.createdBy
+                        )?.name
+                      }
+                    </span>{" "}
+                    proposes for{" "}
+                    <span className="font-bold">
+                      {
+                        group.members.find((member) => member._id === wish.user)
+                          ?.name
+                      }
+                    </span>
+                    :
+                  </span>
+                )}
+                <div>
+                  <Markdown>{wish.content}</Markdown>
+                </div>
+                {wish.createdBy === me._id && (
+                  <EditWishGroups
+                    id={wish._id}
+                    groups={wish.groups}
+                    availableGroups={groups}
+                  />
+                )}
+                <Comments comments={wish.comments} users={group.members} />
+                <AddComment
+                  mine={wish.user === me._id}
+                  group={groupId}
+                  wish={wish._id}
                 />
-              )}
-              <Comments comments={wish.comments} users={group.members} />
-              <AddComment
-                mine={wish.user === me._id}
-                group={groupId}
-                wish={wish._id}
-              />
-            </WishComponent>
-          ))}
+              </WishComponent>
+            ))
+          ) : (
+            <Elf />
+          )}
         </WishesComponent>
         <CreateWish initialState={{ content: "", groups: [groupId] }} />
       </Column>
