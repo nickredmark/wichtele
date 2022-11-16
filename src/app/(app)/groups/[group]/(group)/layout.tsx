@@ -14,7 +14,7 @@ import { Comment, Group, User, Wish } from "../../../../../config/models";
 import { getDb } from "../../../../../services/db";
 import { getMe } from "../../../../../utils/data";
 import { serialize } from "../../../../../utils/objects";
-export const getData = async (groupId: string) => {
+const getData = async (groupId: string) => {
   const { Users, Groups, Wishes, Comments } = await getDb();
 
   const me = await getMe();

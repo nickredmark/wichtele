@@ -15,7 +15,7 @@ import { getDb } from "../../../../../../services/db";
 import { getMe } from "../../../../../../utils/data";
 import { serialize } from "../../../../../../utils/objects";
 
-export const getData = async (groupId: string, memberId: string) => {
+const getData = async (groupId: string, memberId: string) => {
   const { Users, Groups, Wishes, Comments } = await getDb();
 
   const me = await getMe();
@@ -87,10 +87,7 @@ const MemberLayout = async ({
   params: { group: string; member: string };
   children: ReactNode;
 }) => {
-  const { me, group, groups, members, member } = await getData(
-    groupId,
-    memberId
-  );
+  const { me, groups, members, member } = await getData(groupId, memberId);
 
   return (
     <>
@@ -118,7 +115,7 @@ const MemberLayout = async ({
                     members.find((member) => member._id === wish.createdBy)
                       ?.name
                   }
-                  's proposal
+                  {"'s proposal"}
                 </span>
               )}
               <div>

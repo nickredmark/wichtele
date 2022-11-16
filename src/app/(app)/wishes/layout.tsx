@@ -12,7 +12,7 @@ import { getDb } from "../../../services/db";
 import { getMe } from "../../../utils/data";
 import { serialize } from "../../../utils/objects";
 
-export const getData = async () => {
+const getData = async () => {
   const { Groups, Wishes } = await getDb();
   const me = await getMe();
 

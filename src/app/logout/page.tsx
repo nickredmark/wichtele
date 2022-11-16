@@ -10,6 +10,8 @@ const LogoutPage = () => {
     document.cookie = `code=; Max-Age=0`;
     router.push("/");
   }, []);
+
+  return null;
 };
 
 export default LogoutPage;

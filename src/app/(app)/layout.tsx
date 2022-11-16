@@ -8,7 +8,7 @@ import { getDb } from "../../services/db";
 import { serialize } from "../../utils/objects";
 import { Navigation } from "./navigation";
 
-export const getData = async (): Promise<User | null> => {
+const getData = async (): Promise<User | null> => {
   const nextCookies = cookies();
   const code = nextCookies.get("code")?.value;
   if (!code) {

@@ -6,7 +6,7 @@ import { getDb } from "../../../services/db";
 import { serialize } from "../../../utils/objects";
 import { EditProfile } from "./edit-profile";
 
-export const getData = async () => {
+const getData = async () => {
   const nextCookies = cookies();
   const code = nextCookies.get("code")?.value;
   const { Users } = await getDb();

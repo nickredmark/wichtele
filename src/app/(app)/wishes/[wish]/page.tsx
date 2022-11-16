@@ -6,7 +6,7 @@ import { getMe } from "../../../../utils/data";
 import { serialize } from "../../../../utils/objects";
 import { EditWish } from "./edit-wish";
 
-export const getData = async (wishId: string) => {
+const getData = async (wishId: string) => {
   const { Groups, Wishes } = await getDb();
 
   const me = await getMe();
