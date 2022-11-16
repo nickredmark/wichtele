@@ -6,6 +6,7 @@ import { FaChevronDown, FaChevronRight, FaCopy, FaUser } from "react-icons/fa";
 import { AddMember } from "../../components/add-member";
 import { Column } from "../../components/column";
 import { CreateGroup } from "../../components/create-group";
+import { Markdown } from "../../components/markdown";
 import { Group, User } from "../../config/models";
 
 export const Navigation = ({ me }: { me: User }) => {
@@ -98,8 +99,10 @@ const GroupComponent: FC<{
                   </h2>
                   {member.code && <Code code={member.code} />}
                   {member.lastActivity && (
-                    <span className="text-sm text-gray-500">
-                      {member.lastActivity.content}
+                    <span className="text-sm text-gray-500 break-words">
+                      <Markdown strip>
+                        {member.lastActivity.content.slice(0, 50)}
+                      </Markdown>
                     </span>
                   )}
                 </a>

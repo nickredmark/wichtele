@@ -41,6 +41,9 @@ export const Column: FC<
       } ${paper ? "paper" : ""} ${
         segmentsMatch(segments, showWithSegments) ? "flex" : "hidden sm:flex"
       } ${className}`}
+      style={{
+        minWidth: "30%",
+      }}
     >
       {children}
     </div>
