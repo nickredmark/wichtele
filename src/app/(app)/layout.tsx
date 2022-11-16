@@ -1,29 +1,39 @@
-import { ReactNode, useCallback, useState } from "react";
+import { cookies } from "next/headers";
+import { ReactNode } from "react";
+import { DataProvider } from "../../components/data";
 import { SetCode } from "../../components/set-code";
-import { DataContext, getData } from "./data";
+import { Data } from "../../config/models";
 import { Navigation } from "./navigation";
+
+const getData = async (): Promise<Data> => {
+  const nextCookies = cookies();
+  const code = nextCookies.get("code")?.value;
+  if (!code) {
+    throw new Error("No code");
+  }
+  const res = await fetch(process.env.NEXT_PUBLIC_API_URL!, {
+    headers: {
+      cookie: `code=${code}`,
+    },
+  });
+  if (!res.ok) {
+    throw new Error(await res.text());
+  }
+  const data = await res.json();
+  return data;
+};
 
 const RootLayout = async ({ children }: { children: ReactNode }) => {
   try {
-    const initialData = await getData();
-    const [data, setData] = useState(initialData);
-    const refetch = useCallback(async () => {
-      const data = await getData();
-      setData(data);
-    }, []);
+    const data = await getData();
 
     return (
-      <DataContext.Provider
-        value={{
-          ...data,
-          refetch,
-        }}
-      >
+      <DataProvider data={data}>
         <main>
           <Navigation me={data.me} users={data.users} />
           {children}
         </main>
-      </DataContext.Provider>
+      </DataProvider>
     );
   } catch (e) {
     console.error(e);

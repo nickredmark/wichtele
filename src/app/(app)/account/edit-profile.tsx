@@ -1,9 +1,9 @@
 "use client";
 
 import { FC, useState } from "react";
+import { useData } from "../../../components/data";
 import { Form } from "../../../components/form";
 import { User } from "../../../config/models";
-import { useData } from "../data";
 
 export const EditProfile: FC<{ me: User }> = ({ me }) => {
   const [name, setName] = useState(me.name);

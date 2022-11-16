@@ -1,3 +1,8 @@
+export type Data = {
+  me: User;
+  users: User[];
+};
+
 export type User = {
   _id: string;
   name: string;

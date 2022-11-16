@@ -2,9 +2,9 @@
 
 import { union, without } from "lodash";
 import { FC } from "react";
-import { useData } from "../app/(app)/data";
 import { Pill } from "../app/(app)/wishes/[wish]/edit-wish";
 import { Group } from "../config/models";
+import { useData } from "./data";
 
 export const EditWishGroups: FC<{
   id: string;

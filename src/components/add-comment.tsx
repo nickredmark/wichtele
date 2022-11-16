@@ -2,7 +2,7 @@
 
 import { FC, useState } from "react";
 import { FaPaperPlane } from "react-icons/fa";
-import { useData } from "../app/(app)/data";
+import { useData } from "./data";
 import { Form, Textarea } from "./form";
 
 export const AddComment: FC<{ mine: boolean; wish: string; group: string }> = ({

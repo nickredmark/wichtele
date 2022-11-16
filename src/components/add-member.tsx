@@ -1,8 +1,8 @@
 "use client";
 
 import { FC, useState } from "react";
-import { useData } from "../app/(app)/data";
 import { User } from "../config/models";
+import { useData } from "./data";
 import { Form } from "./form";
 
 export const AddMember: FC<{

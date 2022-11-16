@@ -1,13 +1,15 @@
+"use client";
+
 import { ReactNode } from "react";
 import { FaArrowLeft, FaPencilAlt } from "react-icons/fa";
 import { Column } from "../../../components/column";
 import { CreateWish } from "../../../components/create-wish";
+import { useData } from "../../../components/data";
 import { EditWishGroups } from "../../../components/edit-wish-groups";
 import { Elf } from "../../../components/elf";
 import { Markdown } from "../../../components/markdown";
 import { WishComponent } from "../../../components/wish";
 import { WishesComponent } from "../../../components/wishes";
-import { useData } from "../data";
 
 const WishesPage = ({ children }: { children: ReactNode }) => {
   const { me } = useData();

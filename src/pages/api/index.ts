@@ -70,8 +70,6 @@ const handler: NextApiHandlerWithContext = async (
     "_id"
   );
 
-  console.log("will you do a single call as promised?");
-
   return { me, users };
 };
 

@@ -3,9 +3,9 @@
 import { union, without } from "lodash";
 import { useRouter } from "next/navigation";
 import { FC, useState } from "react";
-import { useData } from "../app/(app)/data";
 import { Pill } from "../app/(app)/wishes/[wish]/edit-wish";
 import { Group, User } from "../config/models";
+import { useData } from "./data";
 import { Form, Textarea } from "./form";
 
 type State = {

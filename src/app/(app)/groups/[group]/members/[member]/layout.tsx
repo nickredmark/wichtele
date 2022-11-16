@@ -1,15 +1,17 @@
+"use client";
+
 import { ReactNode } from "react";
 import { FaArrowLeft, FaChevronRight, FaPencilAlt } from "react-icons/fa";
 import { AddComment } from "../../../../../../components/add-comment";
 import { Column } from "../../../../../../components/column";
 import { Comments } from "../../../../../../components/comments";
 import { CreateWish } from "../../../../../../components/create-wish";
+import { useData } from "../../../../../../components/data";
 import { EditWishGroups } from "../../../../../../components/edit-wish-groups";
 import { Elf } from "../../../../../../components/elf";
 import { Markdown } from "../../../../../../components/markdown";
 import { WishComponent } from "../../../../../../components/wish";
 import { WishesComponent } from "../../../../../../components/wishes";
-import { useData } from "../../../../data";
 
 const MemberLayout = ({
   params: { group: groupId, member: memberId },

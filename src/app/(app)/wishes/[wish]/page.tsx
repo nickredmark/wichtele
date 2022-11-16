@@ -1,5 +1,7 @@
+"use client";
+
 import { Column } from "../../../../components/column";
-import { useData } from "../../data";
+import { useData } from "../../../../components/data";
 import { EditWish } from "./edit-wish";
 
 const WishPage = ({

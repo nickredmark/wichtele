@@ -12,9 +12,9 @@ import {
 import { AddMember } from "../../components/add-member";
 import { Column } from "../../components/column";
 import { CreateGroup } from "../../components/create-group";
+import { useData } from "../../components/data";
 import { Markdown } from "../../components/markdown";
 import { Group, User } from "../../config/models";
-import { useData } from "./data";
 
 export const Navigation = ({ me, users }: { me: User; users: User[] }) => {
   const segments = useSelectedLayoutSegments();
