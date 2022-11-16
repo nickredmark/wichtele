@@ -2,7 +2,7 @@ import { orderBy } from "lodash";
 import { ObjectId } from "mongodb";
 import { redirect } from "next/navigation";
 import { ReactNode } from "react";
-import { FaArrowLeft, FaPencilAlt } from "react-icons/fa";
+import { FaArrowLeft, FaChevronRight, FaPencilAlt } from "react-icons/fa";
 import { AddComment } from "../../../../../../components/add-comment";
 import { Column } from "../../../../../../components/column";
 import { Comments } from "../../../../../../components/comments";
@@ -89,15 +89,22 @@ const MemberLayout = async ({
   params: { group: string; member: string };
   children: ReactNode;
 }) => {
-  const { me, groups, members, member } = await getData(groupId, memberId);
+  const { me, group, groups, members, member } = await getData(
+    groupId,
+    memberId
+  );
 
   return (
     <>
       <Column>
-        <h2 className="nav-header flex items-stretch space-x-1">
+        <h2 className="nav-header flex items-center space-x-2">
           <a href="/" className="p-1 sm:hidden">
             <FaArrowLeft />
           </a>
+          <span>{group.name}</span>
+          <span className="text-xs">
+            <FaChevronRight />
+          </span>
           <span className="flex-grow">{member.name}</span>
         </h2>
         <WishesComponent>

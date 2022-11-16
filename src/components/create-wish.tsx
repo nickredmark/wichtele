@@ -53,7 +53,7 @@ export const CreateWish: FC<{
             }
             onSubmit={onSubmit}
             placeholder={
-              user ? `Propose a gift idea for ${user.name}` : "New Wish"
+              user ? `Propose a secret gift idea for ${user.name}` : "New Wish"
             }
           />
           {availableGroups && availableGroups.length > 0 && (
