@@ -129,32 +129,33 @@ const Code: FC<{ code: string }> = ({ code }) => {
   }
 
   return (
-    <button
-      className="flex flex-row space-x-1 items-center text-xs text-gray-500 absolute right-2 top-2"
-      onBlur={() => setCopied(false)}
-      onClick={(e) => {
-        e.preventDefault();
-        if (navigator.clipboard) {
-          navigator.clipboard.writeText(url);
-          setCopied(true);
-        } else {
-          setOpen(true);
-        }
-      }}
-    >
-      <span>invite link</span>
-      <FaCopy />
-      {copied && <div className="absolute top-full">Copied!</div>}
+    <>
+      <button
+        className="flex flex-row space-x-1 items-center text-xs text-gray-500 absolute right-2 top-2"
+        onBlur={() => setCopied(false)}
+        onClick={(e) => {
+          e.preventDefault();
+          if (navigator.clipboard) {
+            navigator.clipboard.writeText(url);
+            setCopied(true);
+          } else {
+            setOpen(true);
+          }
+        }}
+      >
+        <span>invite link</span>
+        <FaCopy />
+        {copied && <div className="absolute top-full">Copied!</div>}
+      </button>
       {open && (
         <input
           onBlur={() => setOpen(false)}
           autoFocus
           onFocus={(e) => e.target.select()}
           readOnly
-          className="absolute top-full"
           value={url}
         />
       )}
-    </button>
+    </>
   );
 };
