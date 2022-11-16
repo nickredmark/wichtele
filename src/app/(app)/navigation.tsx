@@ -14,14 +14,16 @@ import { Column } from "../../components/column";
 import { CreateGroup } from "../../components/create-group";
 import { Markdown } from "../../components/markdown";
 import { Group, User } from "../../config/models";
+import { useData } from "./data";
 
 export const Navigation = ({ me, users }: { me: User; users: User[] }) => {
   const segments = useSelectedLayoutSegments();
   const router = useRouter();
+  const { refetch } = useData();
 
   useEffect(() => {
     const interval = setInterval(() => {
-      router.refresh();
+      refetch();
     }, 10000);
 
     return () => clearInterval(interval);
@@ -136,7 +138,7 @@ const Code: FC<{ id: string; code: string }> = ({ id, code }) => {
   const [url, setUrl] = useState<string>();
   const [copied, setCopied] = useState(false);
   const [open, setOpen] = useState(false);
-  const router = useRouter();
+  const { refetch } = useData();
 
   useEffect(() => {
     setUrl(`${location.origin}/?code=${code}`);
@@ -171,7 +173,7 @@ const Code: FC<{ id: string; code: string }> = ({ id, code }) => {
             await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/${id}`, {
               method: "DELETE",
             });
-            router.refresh();
+            refetch();
           }}
         >
           <FaTrash />

@@ -1,22 +1,10 @@
-import { cookies } from "next/headers";
 import { FaArrowLeft } from "react-icons/fa";
 import { Column } from "../../../components/column";
-import { User } from "../../../config/models";
-import { getDb } from "../../../services/db";
-import { serialize } from "../../../utils/objects";
+import { useData } from "../data";
 import { EditProfile } from "./edit-profile";
 
-const getData = async () => {
-  const nextCookies = cookies();
-  const code = nextCookies.get("code")?.value;
-  const { Users } = await getDb();
-  const me = serialize(await Users.findOne<User>({ code }))!;
-
-  return me;
-};
-
-const Profile = async () => {
-  const me = await getData();
+const Profile = () => {
+  const { me } = useData();
 
   return (
     <Column paper={false}>

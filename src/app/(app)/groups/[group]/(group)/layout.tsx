@@ -1,5 +1,3 @@
-import { max, orderBy } from "lodash";
-import { ObjectId } from "mongodb";
 import { ReactNode } from "react";
 import { FaArrowLeft, FaPencilAlt } from "react-icons/fa";
 import { AddComment } from "../../../../../components/add-comment";
@@ -11,82 +9,18 @@ import { Elf } from "../../../../../components/elf";
 import { Markdown } from "../../../../../components/markdown";
 import { WishComponent } from "../../../../../components/wish";
 import { WishesComponent } from "../../../../../components/wishes";
-import { Comment, Group, User, Wish } from "../../../../../config/models";
-import { getDb } from "../../../../../services/db";
-import { getMe } from "../../../../../utils/data";
-import { serialize } from "../../../../../utils/objects";
-const getData = async (groupId: string) => {
-  const { Users, Groups, Wishes, Comments } = await getDb();
+import { useData } from "../../../data";
 
-  const me = await getMe();
-
-  const group = (await Groups.findOne<Group>({ _id: new ObjectId(groupId) }))!;
-
-  const groups = serialize(
-    await Groups.find<Group>({
-      members: new ObjectId(me._id),
-    })
-      .sort("createdAt", "asc")
-      .toArray()
-  );
-
-  group.members = await Users.find({
-    $and: [
-      {
-        _id: { $in: group.members },
-      },
-    ],
-  })
-    .project<User>({ _id: true, name: true })
-    .toArray();
-
-  let wishes = serialize(
-    await Wishes.find<Wish>({
-      groups: group._id,
-      $or: [
-        { createdBy: new ObjectId(me._id) },
-        {
-          user: {
-            $ne: new ObjectId(me._id),
-          },
-        },
-      ],
-    }).toArray()
-  );
-
-  for (const wish of wishes) {
-    wish.comments = serialize(
-      await Comments.find<Comment>({
-        wish: new ObjectId(wish._id),
-        group: new ObjectId(group._id),
-        ...(me._id === wish.user && {
-          createdBy: new ObjectId(me._id),
-        }),
-      }).toArray()
-    );
-  }
-
-  wishes = orderBy(
-    wishes,
-    (wish) =>
-      max([
-        wish.createdAt,
-        ...wish.comments.map((comment) => comment.createdAt),
-      ]),
-    "desc"
-  );
-
-  return serialize({ me, group, wishes, groups });
-};
-
-const GroupPage = async ({
+const GroupPage = ({
   params: { group: groupId },
   children,
 }: {
   params: { group: string };
   children: ReactNode;
 }) => {
-  const { me, group, groups, wishes } = await getData(groupId);
+  const { me } = useData();
+  const group = me.groups.find((group) => group._id === groupId)!;
+  const meMember = group.members.find((member) => member._id === me._id)!;
 
   return (
     <>
@@ -98,8 +32,8 @@ const GroupPage = async ({
           <span className="flex-grow">{group.name}</span>
         </h2>
         <WishesComponent>
-          {wishes.length ? (
-            wishes.map((wish) => (
+          {meMember.wishes.length ? (
+            meMember.wishes.map((wish) => (
               <WishComponent key={wish._id}>
                 {wish.createdBy === me._id && (
                   <a
@@ -146,7 +80,7 @@ const GroupPage = async ({
                   <EditWishGroups
                     id={wish._id}
                     groups={wish.groups}
-                    availableGroups={groups}
+                    availableGroups={me.groups}
                   />
                 )}
                 <Comments comments={wish.comments} users={group.members} />

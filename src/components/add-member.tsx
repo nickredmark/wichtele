@@ -1,7 +1,7 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { FC, useState } from "react";
+import { useData } from "../app/(app)/data";
 import { User } from "../config/models";
 import { Form } from "./form";
 
@@ -10,7 +10,7 @@ export const AddMember: FC<{
   members: User[];
   users: User[];
 }> = ({ groupId, members, users }) => {
-  const router = useRouter();
+  const { refetch } = useData();
   const [name, setName] = useState("");
 
   return (
@@ -36,7 +36,7 @@ export const AddMember: FC<{
           );
           await res2.json();
           setName("");
-          router.refresh();
+          refetch();
         }}
         canSubmit={!!name}
         submitLabel="Add"
@@ -69,7 +69,7 @@ export const AddMember: FC<{
                     }
                   );
                   setName("");
-                  router.refresh();
+                  refetch();
                 }}
               >
                 {user.name}

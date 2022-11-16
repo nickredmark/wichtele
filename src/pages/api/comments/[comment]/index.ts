@@ -2,7 +2,7 @@ import {
   handleEntity,
   NextApiHandlerWithContext,
   withContext,
-} from "../../../../services/api";
+} from "../../../../utils/api";
 
 const handler: NextApiHandlerWithContext = (req, res, { me, Comments }) =>
   handleEntity(req, res, Comments, "comment", {

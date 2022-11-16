@@ -1,8 +1,8 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { FC, useState } from "react";
 import { FaPaperPlane } from "react-icons/fa";
+import { useData } from "../app/(app)/data";
 import { Form, Textarea } from "./form";
 
 export const AddComment: FC<{ mine: boolean; wish: string; group: string }> = ({
@@ -10,7 +10,7 @@ export const AddComment: FC<{ mine: boolean; wish: string; group: string }> = ({
   wish,
   group,
 }) => {
-  const router = useRouter();
+  const { refetch } = useData();
   const [content, setContent] = useState("");
 
   const onSubmit = async () => {
@@ -26,7 +26,7 @@ export const AddComment: FC<{ mine: boolean; wish: string; group: string }> = ({
       }),
     });
     setContent("");
-    router.refresh();
+    refetch();
   };
 
   return (

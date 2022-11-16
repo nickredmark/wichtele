@@ -1,13 +1,13 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { FC, useState } from "react";
 import { Form } from "../../../components/form";
 import { User } from "../../../config/models";
+import { useData } from "../data";
 
 export const EditProfile: FC<{ me: User }> = ({ me }) => {
   const [name, setName] = useState(me.name);
-  const router = useRouter();
+  const { refetch } = useData();
 
   return (
     <Form
@@ -21,7 +21,7 @@ export const EditProfile: FC<{ me: User }> = ({ me }) => {
             name,
           }),
         });
-        router.refresh();
+        refetch();
       }}
       cancelLabel="Cancel"
       onCancel={() => setName(me.name)}

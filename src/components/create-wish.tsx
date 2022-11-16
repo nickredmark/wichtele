@@ -3,6 +3,7 @@
 import { union, without } from "lodash";
 import { useRouter } from "next/navigation";
 import { FC, useState } from "react";
+import { useData } from "../app/(app)/data";
 import { Pill } from "../app/(app)/wishes/[wish]/edit-wish";
 import { Group, User } from "../config/models";
 import { Form, Textarea } from "./form";
@@ -18,6 +19,7 @@ export const CreateWish: FC<{
   availableGroups?: Group[];
 }> = ({ user, initialState, availableGroups }) => {
   const router = useRouter();
+  const { refetch } = useData();
   const [{ content, groups }, setState] = useState(initialState);
 
   const onSubmit = async () => {
@@ -33,7 +35,7 @@ export const CreateWish: FC<{
       }),
     });
     setState((state) => ({ ...state, content: "" }));
-    router.refresh();
+    refetch();
   };
 
   return (

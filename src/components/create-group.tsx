@@ -25,7 +25,6 @@ export const CreateGroup: FC<{ me: User }> = ({ me }) => {
         const id = await res.json();
         setName("");
         router.push(`groups/${id}/members/${me._id}`);
-        router.refresh();
       }}
       canSubmit={!!name}
       submitLabel="Create"

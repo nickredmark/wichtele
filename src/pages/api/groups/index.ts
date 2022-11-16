@@ -3,7 +3,7 @@ import {
   createEntity,
   NextApiHandlerWithContext,
   withContext,
-} from "../../../services/api";
+} from "../../../utils/api";
 
 const handler: NextApiHandlerWithContext = async (req, res, ctx) =>
   createEntity(req, res, ctx, ctx.Groups, {

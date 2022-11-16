@@ -1,8 +1,8 @@
 "use client";
 
 import { union, without } from "lodash";
-import { useRouter } from "next/navigation";
 import { FC } from "react";
+import { useData } from "../app/(app)/data";
 import { Pill } from "../app/(app)/wishes/[wish]/edit-wish";
 import { Group } from "../config/models";
 
@@ -11,7 +11,7 @@ export const EditWishGroups: FC<{
   groups: string[];
   availableGroups: Group[];
 }> = ({ id, groups, availableGroups }) => {
-  const router = useRouter();
+  const { refetch } = useData();
 
   return (
     <>
@@ -33,7 +33,7 @@ export const EditWishGroups: FC<{
                       : without(groups, _id),
                   }),
                 });
-                router.refresh();
+                refetch();
               }}
             >
               {name}

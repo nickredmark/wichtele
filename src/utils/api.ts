@@ -2,7 +2,7 @@ import Joi from "joi";
 import { Collection, Document, ObjectId, WithId } from "mongodb";
 import { NextApiRequest, NextApiResponse } from "next";
 import { sendError } from "next/dist/server/api-utils";
-import { getDb } from "./db";
+import { getDb } from "../services/db";
 
 type Context = {
   Users: Collection;
@@ -26,7 +26,7 @@ export const withContext =
       const code = req.cookies["code"];
 
       if (!code) {
-        return sendError(res, 400, "No x-user-code cookie provided.");
+        return sendError(res, 400, "No code cookie provided.");
       }
 
       const { Users, Groups, Wishes, Comments } = await getDb();

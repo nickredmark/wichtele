@@ -1,4 +1,3 @@
-import { ObjectId } from "mongodb";
 import { ReactNode } from "react";
 import { FaArrowLeft, FaPencilAlt } from "react-icons/fa";
 import { Column } from "../../../components/column";
@@ -8,37 +7,10 @@ import { Elf } from "../../../components/elf";
 import { Markdown } from "../../../components/markdown";
 import { WishComponent } from "../../../components/wish";
 import { WishesComponent } from "../../../components/wishes";
-import { Group, Wish } from "../../../config/models";
-import { getDb } from "../../../services/db";
-import { getMe } from "../../../utils/data";
-import { serialize } from "../../../utils/objects";
+import { useData } from "../data";
 
-const getData = async () => {
-  const { Groups, Wishes } = await getDb();
-  const me = await getMe();
-
-  const groups = serialize(
-    await Groups.find<Group>({
-      members: new ObjectId(me._id),
-    })
-      .sort("createdAt", "desc")
-      .toArray()
-  );
-
-  const wishes = serialize(
-    await Wishes.find<Wish>({
-      user: new ObjectId(me._id),
-      createdBy: new ObjectId(me._id),
-    })
-      .sort("createdAt", "asc")
-      .toArray()
-  );
-
-  return { wishes, groups };
-};
-
-const WishesPage = async ({ children }: { children: ReactNode }) => {
-  const { wishes, groups } = await getData();
+const WishesPage = ({ children }: { children: ReactNode }) => {
+  const { me } = useData();
 
   return (
     <>
@@ -50,8 +22,8 @@ const WishesPage = async ({ children }: { children: ReactNode }) => {
           <span>All your wishes</span>
         </h2>
         <WishesComponent>
-          {wishes.length ? (
-            wishes.map((wish) => (
+          {me.wishes.length ? (
+            me.wishes.map((wish) => (
               <WishComponent key={wish._id}>
                 <a href={`/wishes/${wish._id}`} className="float-right">
                   <FaPencilAlt />
@@ -62,7 +34,7 @@ const WishesPage = async ({ children }: { children: ReactNode }) => {
                 <EditWishGroups
                   id={wish._id}
                   groups={wish.groups}
-                  availableGroups={groups}
+                  availableGroups={me.groups}
                 />
               </WishComponent>
             ))
@@ -73,9 +45,9 @@ const WishesPage = async ({ children }: { children: ReactNode }) => {
         <CreateWish
           initialState={{
             content: "",
-            groups: groups.map((group) => group._id),
+            groups: me.groups.map((group) => group._id),
           }}
-          availableGroups={groups}
+          availableGroups={me.groups}
         />
       </Column>
       {children}
