@@ -6,7 +6,7 @@
     "bootstrap": "npm ci",
     "deps:docker-compose": "docker-compose up --build mongodb",
     "deps": "npm run deps:docker-compose",
-    "dev": "next dev",
+    "dev": "next dev -H wishes.local",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"

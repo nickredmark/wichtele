@@ -33,7 +33,7 @@ export const AddComment: FC<{ wish: string; group: string }> = ({
       onSubmit={onSubmit}
       canSubmit={!!content}
       submitLabel={<FaPaperPlane />}
-      className="flex flex-row"
+      className="flex flex-row space-x-1"
     >
       <Textarea
         rows={1}

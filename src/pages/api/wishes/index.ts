@@ -11,7 +11,7 @@ const handler: NextApiHandlerWithContext = async (req, res, ctx) =>
     schema: Joi.object({
       content: Joi.string().required(),
       user: TYPES.objectId.default(ctx.me._id),
-      groups: Joi.array().required().items(TYPES.objectId).min(1),
+      groups: Joi.array().required().items(TYPES.objectId),
     }),
   });
 

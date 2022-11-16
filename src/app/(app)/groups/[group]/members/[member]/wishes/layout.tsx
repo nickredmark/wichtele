@@ -1,26 +1,30 @@
-import { pick } from "lodash";
 import { ObjectId } from "mongodb";
-import { cookies } from "next/headers";
 import { ReactNode } from "react";
 import { FaArrowLeft, FaPencilAlt } from "react-icons/fa";
-import { Comment, User, Wish } from "../../../../../../../config/models";
+import { Comment, Group, User, Wish } from "../../../../../../../config/models";
 import { getDb } from "../../../../../../../services/db";
+import { getMe } from "../../../../../../../utils/data";
 import { serialize } from "../../../../../../../utils/objects";
 import { Column } from "../../../../../column";
 import { Markdown } from "../../../../../markdown";
 import { AddComment } from "./add-comment";
 import { CreateWish } from "./create-wish";
+import { EditWishGroups } from "./edit-wish.groups";
 
 export const getData = async (groupId: string, memberId: string) => {
-  const nextCookies = cookies();
-  const code = nextCookies.get("code")?.value;
-
   const { Users, Groups, Wishes, Comments } = await getDb();
 
-  const me = serialize(
-    pick((await Users.findOne<User>({ code }))!, "_id", "name")
-  );
+  const me = await getMe();
+
   const group = (await Groups.findOne({ _id: new ObjectId(groupId) }))!;
+
+  const groups = serialize(
+    await Groups.find<Group>({
+      members: new ObjectId(me._id),
+    })
+      .sort("createdAt", "asc")
+      .toArray()
+  );
 
   const members = await Users.find({
     $and: [
@@ -58,7 +62,7 @@ export const getData = async (groupId: string, memberId: string) => {
     }).toArray();
   }
 
-  return serialize({ me, group, members, member });
+  return serialize({ me, group, groups, members, member });
 };
 
 const MemberLayout = async ({
@@ -68,7 +72,10 @@ const MemberLayout = async ({
   params: { group: string; member: string };
   children: ReactNode;
 }) => {
-  const { me, group, members, member } = await getData(groupId, memberId);
+  const { me, group, groups, members, member } = await getData(
+    groupId,
+    memberId
+  );
 
   return (
     <>
@@ -105,6 +112,13 @@ const MemberLayout = async ({
               <div>
                 <Markdown>{wish.content}</Markdown>
               </div>
+              {wish.createdBy === me._id && (
+                <EditWishGroups
+                  id={wish._id}
+                  groups={wish.groups}
+                  availableGroups={groups}
+                />
+              )}
               <div className="my-2 border-gray-300 border-b">
                 {wish.comments.map((comment) => (
                   <div

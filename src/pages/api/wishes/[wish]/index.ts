@@ -15,7 +15,7 @@ const handler: NextApiHandlerWithContext = async (
     canUpdate: async (wish) => wish.createdBy.equals(me._id),
     updateSchema: Joi.object({
       content: Joi.string(),
-      groups: Joi.array().items(TYPES.objectId).min(1),
+      groups: Joi.array().items(TYPES.objectId),
     }),
     canDelete: async (wish) => {
       if (!wish.createdBy.equals(me._id)) {

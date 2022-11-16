@@ -46,6 +46,10 @@ textarea {
   @apply p-1 border-gray-200 border flex-1 text-sm w-full;
 }
 
+textarea {
+  @apply rounded-md;
+}
+
 .markdown p {
   margin-bottom: 8px;
 }

@@ -1,9 +1,11 @@
 "use client";
 
+import { union, without } from "lodash";
 import { useRouter } from "next/navigation";
 import { FC, useState } from "react";
-import { User } from "../../../../../../../config/models";
+import { Group, User } from "../../../../../../../config/models";
 import { Form, Textarea } from "../../../../../form";
+import { Pill } from "./[wish]/edit-wish";
 
 type State = {
   content: string;
@@ -13,7 +15,8 @@ type State = {
 export const CreateWish: FC<{
   initialState: State;
   user?: User;
-}> = ({ user, initialState }) => {
+  availableGroups?: Group[];
+}> = ({ user, initialState, availableGroups }) => {
   const router = useRouter();
   const [{ content, groups }, setState] = useState(initialState);
 
@@ -29,7 +32,7 @@ export const CreateWish: FC<{
         user: user?._id,
       }),
     });
-    setState(initialState);
+    setState((state) => ({ ...state, content: "" }));
     router.refresh();
   };
 
@@ -40,18 +43,40 @@ export const CreateWish: FC<{
         canSubmit={!!content && groups.length > 0}
         onCancel={() => router.back()}
         submitLabel={user ? "Propose" : "Create"}
-        className="flex flex-row"
+        className="flex flex-row space-x-1"
       >
-        <Textarea
-          value={content}
-          onChange={(e) =>
-            setState((state) => ({ ...state, content: e.target.value }))
-          }
-          onSubmit={onSubmit}
-          placeholder={
-            user ? `Surprise gift idea for ${user.name}` : "New Wish"
-          }
-        />
+        <div className="flex flex-grow flex-col">
+          <Textarea
+            value={content}
+            onChange={(e) =>
+              setState((state) => ({ ...state, content: e.target.value }))
+            }
+            onSubmit={onSubmit}
+            placeholder={
+              user ? `Surprise gift idea for ${user.name}` : "New Wish"
+            }
+          />
+          {availableGroups && availableGroups.length > 0 && (
+            <div className="flex flex-row flex-wrap mt-2 space-x-1 items-center">
+              {availableGroups.map(({ _id, name }) => (
+                <Pill
+                  key={_id}
+                  selected={!!groups.includes(_id)}
+                  setSelected={(selected) =>
+                    setState(({ groups, ...state }) => ({
+                      ...state,
+                      groups: selected
+                        ? union(groups, [_id])
+                        : without(groups, _id),
+                    }))
+                  }
+                >
+                  {name}
+                </Pill>
+              ))}
+            </div>
+          )}
+        </div>
       </Form>
     </>
   );

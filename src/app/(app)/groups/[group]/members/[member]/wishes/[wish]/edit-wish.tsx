@@ -61,9 +61,8 @@ export const EditWish: FC<{
           onSubmit={onSubmit}
           placeholder="New Wish"
         />
-        {(availableGroups.length > 1 || groups.length === 0) && (
+        {availableGroups.length > 0 && (
           <div className="flex flex-row flex-wrap mt-2 space-x-1 items-center">
-            <label>Shared with:</label>
             {availableGroups.map(({ _id, name }) => (
               <Pill
                 key={_id}
@@ -87,19 +86,21 @@ export const EditWish: FC<{
   );
 };
 
-const Pill: FC<
+export const Pill: FC<
   PropsWithChildren<{
     selected: boolean;
-    setSelected: (selected: boolean) => void;
+    setSelected?: (selected: boolean) => void;
   }>
 > = ({ selected, setSelected, children }) => (
   <button
     onClick={(e) => {
       e.preventDefault();
-      setSelected(!selected);
+      setSelected?.(!selected);
     }}
     className={`rounded-2xl px-2 text-sm ${
-      selected ? "bg-gray-500 text-white" : "bg-gray-200"
+      selected
+        ? "border border-gray-500 bg-gray-500 text-white"
+        : "border border-gray-300 text-gray-500 hover:bg-gray-300"
     }`}
   >
     {children}

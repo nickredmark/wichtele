@@ -1,12 +1,12 @@
 import { ObjectId } from "mongodb";
-import { Group, Wish } from "../../../../../../../../config/models";
-import { getDb } from "../../../../../../../../services/db";
-import { getMe } from "../../../../../../../../utils/data";
-import { serialize } from "../../../../../../../../utils/objects";
-import { Column } from "../../../../../../column";
-import { EditWish } from "./edit-wish";
+import { Group, Wish } from "../../../../config/models";
+import { getDb } from "../../../../services/db";
+import { getMe } from "../../../../utils/data";
+import { serialize } from "../../../../utils/objects";
+import { Column } from "../../column";
+import { EditWish } from "../../groups/[group]/members/[member]/wishes/[wish]/edit-wish";
 
-export const getData = async (groupId: string, wishId: string) => {
+export const getData = async (wishId: string) => {
   const { Groups, Wishes } = await getDb();
 
   const me = await getMe();
@@ -24,7 +24,6 @@ export const getData = async (groupId: string, wishId: string) => {
     await Wishes.findOne<Wish>({
       _id: new ObjectId(wishId),
       createdBy: new ObjectId(me._id),
-      groups: new ObjectId(groupId),
     })
   )!;
 
@@ -32,11 +31,11 @@ export const getData = async (groupId: string, wishId: string) => {
 };
 
 const WishPage = async ({
-  params: { group: groupId, wish: wishId },
+  params: { wish: wishId },
 }: {
-  params: { group: string; wish: string };
+  params: { wish: string };
 }) => {
-  const { groups, wish } = await getData(groupId, wishId);
+  const { groups, wish } = await getData(wishId);
   return (
     <Column className="bg-gray-200 sm:max-w-sm">
       <h2 className="nav-header">Edit Wish</h2>

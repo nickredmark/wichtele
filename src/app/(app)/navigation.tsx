@@ -29,6 +29,18 @@ export const Navigation = ({ me }: { me: User }) => {
         </a>
       </h1>
       <div className="flex-grow">
+        <div className="border-gray-300 border-b">
+          <h2>
+            <a
+              href="/wishes"
+              className={`p-2 flex flex-row items-center ${
+                segments[0] === "wishes" ? "bg-gray-100" : "hover:bg-gray-100"
+              }`}
+            >
+              <span className="flex-grow">Your Wishes</span>
+            </a>
+          </h2>
+        </div>
         {me.groups.map((group) => {
           const active = segments[0] === "groups" && segments[1] === group._id;
 
@@ -37,7 +49,9 @@ export const Navigation = ({ me }: { me: User }) => {
               <h2>
                 <a
                   href={active ? "/" : `/groups/${group._id}`}
-                  className="p-2 flex flex-row items-center hover:bg-gray-100"
+                  className={`p-2 flex flex-row items-center ${
+                    active ? "bg-gray-100" : "hover:bg-gray-100"
+                  }`}
                 >
                   <span className="flex-grow">{group.name}</span>
                   {active ? <FaChevronDown /> : <FaChevronRight />}

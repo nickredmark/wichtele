@@ -28,9 +28,6 @@ const Profile = async () => {
       </h2>
       <EditProfile me={me} />
       <div className="p-2 flex flex-col space-y-1">
-        <a href="/account/wishes" className="link">
-          All your wishes
-        </a>
         <a href="/logout" className="link">
           Log out
         </a>
