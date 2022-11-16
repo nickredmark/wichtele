@@ -45,3 +45,15 @@ input[type="url"],
 textarea {
   @apply p-1 border-gray-200 border flex-1 text-sm w-full;
 }
+
+.markdown p {
+  margin-bottom: 8px;
+}
+
+.markdown a {
+  @apply text-blue-900 underline;
+}
+
+.markdown li {
+  @apply list-disc list-inside;
+}

@@ -1,7 +1,7 @@
 "use client";
 
-import { useSelectedLayoutSegments } from "next/navigation";
-import { FC, useState } from "react";
+import { useRouter, useSelectedLayoutSegments } from "next/navigation";
+import { FC, useEffect, useState } from "react";
 import {
   FaChevronDown,
   FaChevronRight,
@@ -15,6 +15,16 @@ import { CreateGroup } from "./create-group";
 
 export const Navigation = ({ me }: { me: User }) => {
   const segments = useSelectedLayoutSegments();
+  const router = useRouter();
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      router.refresh();
+    }, 10000);
+
+    return () => clearInterval(interval);
+  }, [JSON.stringify(segments)]);
+
   return (
     <Column maxSegments={2} className="sm:max-w-xs">
       <h1 className="nav-header flex items-center">
@@ -41,20 +51,29 @@ export const Navigation = ({ me }: { me: User }) => {
               {active && (
                 <>
                   {group.members.map((member) => (
-                    <h2 key={member._id} className="relative">
+                    <div
+                      key={member._id}
+                      className={`relative border-t border-gray-200 ${
+                        segments[2] === "members" && segments[3] === member._id
+                          ? "bg-gray-100"
+                          : "hover:bg-gray-100"
+                      }`}
+                    >
                       <a
                         href={`/groups/${group._id}/members/${member._id}/wishes`}
-                        className={`p-2 pl-4 border-t border-gray-200 flex flex-row ${
-                          segments[2] === "members" &&
-                          segments[3] === member._id
-                            ? "bg-gray-100"
-                            : "hover:bg-gray-100"
-                        }`}
+                        className="flex flex-col p-2 pl-4"
                       >
-                        <span className="flex-grow">{member.name}</span>
+                        <h2>
+                          <span className="flex-grow">{member.name}</span>
+                        </h2>
+                        {member.code && <Code code={member.code} />}
+                        {member.lastActivity && (
+                          <span className="text-sm text-gray-500">
+                            {member.lastActivity.content}
+                          </span>
+                        )}
                       </a>
-                      {member.code && <Code code={member.code} />}
-                    </h2>
+                    </div>
                   ))}
                   <div className="border-t border-gray-200">
                     {group.createdBy === me._id && (
@@ -76,19 +95,18 @@ const Code: FC<{ code: string }> = ({ code }) => {
   const [copied, setCopied] = useState(false);
 
   return (
-    <a
-      href={`/?code=${code}`}
+    <button
       className="flex flex-row space-x-1 items-center text-xs text-gray-500 absolute right-2 top-2"
       onBlur={() => setCopied(false)}
       onClick={(e) => {
         e.preventDefault();
-        navigator.clipboard.writeText(e.currentTarget.href);
+        navigator.clipboard.writeText(`${location.origin}/?code=${code}`);
         setCopied(true);
       }}
     >
       <span>invite link</span>
       <FaCopy />
       {copied && <div className="absolute top-full">Copied!</div>}
-    </a>
+    </button>
   );
 };

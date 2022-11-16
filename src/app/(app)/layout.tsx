@@ -1,7 +1,8 @@
+import { maxBy, orderBy } from "lodash";
 import { ObjectId } from "mongodb";
 import { cookies } from "next/headers";
 import { ReactNode } from "react";
-import { Group, User } from "../../config/models";
+import { Comment, Group, User, Wish } from "../../config/models";
 import { getDb } from "../../services/db";
 import { serialize } from "../../utils/objects";
 import { Navigation } from "./navigation";
@@ -14,7 +15,7 @@ export const getData = async (): Promise<User | null> => {
     return null;
   }
 
-  const { Users, Groups } = await getDb();
+  const { Users, Groups, Wishes, Comments } = await getDb();
 
   const me = await (async () => {
     const me = serialize(await Users.findOne<User>({ code }));
@@ -56,6 +57,45 @@ export const getData = async (): Promise<User | null> => {
       ...(!loggedIn && createdBy === me._id && { code }),
       ...rest,
     }));
+
+    for (const member of group.members) {
+      const candidates: (Wish | Comment)[] = [];
+
+      const wishes = await Wishes.find<Wish>({
+        user: new ObjectId(member._id),
+        groups: new ObjectId(group._id),
+        ...(me._id === member._id && {
+          createdBy: new ObjectId(me._id),
+        }),
+      }).toArray();
+      candidates.push(...wishes);
+
+      for (const wish of wishes) {
+        const lastComment = await Comments.findOne<Comment>(
+          {
+            wish: new ObjectId(wish._id),
+            group: new ObjectId(group._id),
+            ...(me._id === member._id && {
+              createdBy: new ObjectId(me._id),
+            }),
+          },
+          { sort: { createdAt: "desc" } }
+        );
+        if (lastComment) {
+          candidates.push(lastComment);
+        }
+      }
+
+      if (candidates.length) {
+        member.lastActivity = maxBy(candidates, "createdAt");
+      }
+    }
+
+    group.members = orderBy(
+      group.members,
+      (member) => member.lastActivity?.createdAt || "",
+      "desc"
+    );
   }
 
   return serialize(me);
@@ -64,34 +104,15 @@ export const getData = async (): Promise<User | null> => {
 const RootLayout = async ({ children }: { children: ReactNode }) => {
   const me = await getData();
 
-  const head = (
-    <head>
-      <meta charSet="utf-8" />
-      <meta name="viewport" content="width=device-width" />
-    </head>
-  );
-
   if (!me) {
-    return (
-      <html>
-        {head}
-        <body>
-          <SetCode />
-        </body>
-      </html>
-    );
+    return <SetCode />;
   }
 
   return (
-    <html>
-      {head}
-      <body>
-        <main>
-          <Navigation me={me} />
-          {children}
-        </main>
-      </body>
-    </html>
+    <main>
+      <Navigation me={me} />
+      {children}
+    </main>
   );
 };
 

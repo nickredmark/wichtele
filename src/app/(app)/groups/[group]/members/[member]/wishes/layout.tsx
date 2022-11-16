@@ -7,6 +7,7 @@ import { Comment, User, Wish } from "../../../../../../../config/models";
 import { getDb } from "../../../../../../../services/db";
 import { serialize } from "../../../../../../../utils/objects";
 import { Column } from "../../../../../column";
+import { Markdown } from "../../../../../markdown";
 import { AddComment } from "./add-comment";
 import { CreateWish } from "./create-wish";
 
@@ -51,6 +52,9 @@ export const getData = async (groupId: string, memberId: string) => {
     wish.comments = await Comments.find<Comment>({
       wish: wish._id,
       group: group._id,
+      ...(me._id === memberId && {
+        createdBy: new ObjectId(me._id),
+      }),
     }).toArray();
   }
 
@@ -98,7 +102,9 @@ const MemberLayout = async ({
                   's proposal
                 </span>
               )}
-              <div>{wish.content}</div>
+              <div>
+                <Markdown>{wish.content}</Markdown>
+              </div>
               <div className="my-2 border-gray-300 border-b">
                 {wish.comments.map((comment) => (
                   <div
@@ -117,7 +123,9 @@ const MemberLayout = async ({
                         {new Date(comment.createdAt).toLocaleString()}
                       </span>
                     </div>
-                    <div>{comment.content}</div>
+                    <div>
+                      <Markdown>{comment.content}</Markdown>
+                    </div>
                   </div>
                 ))}
               </div>

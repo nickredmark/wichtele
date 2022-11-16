@@ -14,7 +14,7 @@ export type Group = {
   name: string;
   createdBy: string;
 
-  members: User[];
+  members: (User & { lastActivity?: Wish | Comment })[];
 };
 
 export type Wish = {
@@ -23,6 +23,7 @@ export type Wish = {
   groups: string[];
   reserved: boolean;
   createdBy: string;
+  createdAt: string;
 
   comments: Comment[];
 };
