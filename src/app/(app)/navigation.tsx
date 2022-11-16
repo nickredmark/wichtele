@@ -2,12 +2,7 @@
 
 import { useRouter, useSelectedLayoutSegments } from "next/navigation";
 import { FC, useEffect, useState } from "react";
-import {
-  FaChevronDown,
-  FaChevronRight,
-  FaCopy,
-  FaSignOutAlt,
-} from "react-icons/fa";
+import { FaChevronDown, FaChevronRight, FaCopy, FaUser } from "react-icons/fa";
 import { User } from "../../config/models";
 import { AddMember } from "./add-member";
 import { Column } from "./column";
@@ -26,11 +21,11 @@ export const Navigation = ({ me }: { me: User }) => {
   }, [JSON.stringify(segments)]);
 
   return (
-    <Column maxSegments={2} className="sm:max-w-xs">
-      <h1 className="nav-header flex items-center">
-        <span className="flex-grow">Hallo, {me.name}</span>
-        <a href="/logout">
-          <FaSignOutAlt />
+    <Column showWithSegments={[["groups", "*"]]} className="sm:max-w-xs">
+      <h1 className="nav-header">
+        <a href="/account" className="flex flex-row items-center">
+          <span className="flex-grow">Hallo, {me.name}</span>
+          <FaUser />
         </a>
       </h1>
       <div className="flex-grow">

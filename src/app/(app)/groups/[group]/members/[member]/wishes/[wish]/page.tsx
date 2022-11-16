@@ -7,12 +7,12 @@ import { Column } from "../../../../../../column";
 import { EditWish } from "./edit-wish";
 
 export const getData = async (groupId: string, wishId: string) => {
-  const nextCookies = cookies();
-  const code = nextCookies.get("code")?.value;
-
   const { Users, Groups, Wishes } = await getDb();
 
+  const nextCookies = cookies();
+  const code = nextCookies.get("code")?.value;
   const me = (await Users.findOne<User>({ code }))!;
+
   const groups = await Groups.find({ members: me._id })
     .project<Group>({
       _id: true,

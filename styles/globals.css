@@ -50,8 +50,12 @@ textarea {
   margin-bottom: 8px;
 }
 
+.link {
+  @apply text-blue-700;
+}
+
 .markdown a {
-  @apply text-blue-900 underline;
+  @apply text-blue-700 underline;
 }
 
 .markdown li {

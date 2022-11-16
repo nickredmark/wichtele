@@ -42,7 +42,7 @@ export const Form: FC<
     }}
   >
     {children}
-    <div className="flex flex-wrap justify-end space-x-1 space-y-1">
+    <div className="flex flex-wrap items-stretch justify-end space-x-1">
       {deleteLabel && (
         <button
           type="button"
