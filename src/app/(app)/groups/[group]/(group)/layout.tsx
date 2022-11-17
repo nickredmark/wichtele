@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { ReactNode } from "react";
 import { FaArrowLeft, FaPencilAlt } from "react-icons/fa";
 import { AddComment } from "../../../../../components/add-comment";
@@ -28,9 +29,9 @@ const GroupPage = ({
     <>
       <Column>
         <h2 className="nav-header flex items-stretch space-x-1">
-          <a href="/" className="p-1 sm:hidden">
+          <Link href="/" className="p-1 sm:hidden">
             <FaArrowLeft />
-          </a>
+          </Link>
           <span className="flex-grow">{group.name}</span>
         </h2>
         <WishesComponent>
@@ -38,12 +39,12 @@ const GroupPage = ({
             meMember.wishes.map((wish) => (
               <WishComponent key={wish._id}>
                 {wish.createdBy === me._id && (
-                  <a
+                  <Link
                     href={`/groups/${groupId}/${wish._id}`}
                     className="float-right"
                   >
                     <FaPencilAlt />
-                  </a>
+                  </Link>
                 )}
                 {wish.createdBy === wish.user ? (
                   <span className="text-sm">

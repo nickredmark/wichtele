@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { ReactNode } from "react";
 import { FaArrowLeft, FaChevronRight, FaPencilAlt } from "react-icons/fa";
 import { AddComment } from "../../../../../../components/add-comment";
@@ -28,9 +29,9 @@ const MemberLayout = ({
     <>
       <Column>
         <h2 className="nav-header flex items-center space-x-2">
-          <a href="/" className="p-1 sm:hidden">
+          <Link href="/" className="p-1 sm:hidden">
             <FaArrowLeft />
-          </a>
+          </Link>
           <span>{group.name}</span>
           <span className="text-xs">
             <FaChevronRight />
@@ -42,12 +43,12 @@ const MemberLayout = ({
             member.wishes.map((wish) => (
               <WishComponent key={wish._id}>
                 {wish.createdBy === me._id && (
-                  <a
+                  <Link
                     href={`/groups/${groupId}/members/${member._id}/${wish._id}`}
                     className="float-right"
                   >
                     <FaPencilAlt />
-                  </a>
+                  </Link>
                 )}
                 {wish.createdBy !== member._id && (
                   <span className="font-bold text-sm">

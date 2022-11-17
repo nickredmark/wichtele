@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useSelectedLayoutSegments } from "next/navigation";
 import { FC, useEffect, useState } from "react";
 import {
@@ -32,23 +33,23 @@ export const Navigation = () => {
   return (
     <Column className="sm:max-w-xs" border={false} paper={false}>
       <h1 className="nav-header">
-        <a href="/account" className="flex flex-row items-center">
+        <Link href="/account" className="flex flex-row items-center">
           <span className="flex-grow">Hallo, {me.name}</span>
           <FaUser />
-        </a>
+        </Link>
       </h1>
       <div className="flex flex-col flex-1 overflow-y-auto">
         <div className="flex-grow">
           <div className="border-gray-300 border-b">
             <h2>
-              <a
+              <Link
                 href="/wishes"
                 className={`p-2 flex flex-row items-center ${
                   segments[0] === "wishes" ? "bg-gray-100" : "hover:bg-gray-100"
                 }`}
               >
                 <span className="flex-grow">Your Wishes</span>
-              </a>
+              </Link>
             </h2>
           </div>
           {me.groups.map((group, i) => (
@@ -100,7 +101,7 @@ const GroupComponent: FC<{
                     : "hover:bg-gray-100"
                 }`}
               >
-                <a
+                <Link
                   href={`/groups/${group._id}/members/${member._id}`}
                   className="flex flex-col p-2 pl-4"
                 >
@@ -117,7 +118,7 @@ const GroupComponent: FC<{
                         .slice(0, 50)}
                     </span>
                   )}
-                </a>
+                </Link>
               </div>
             ))}
             <div className="border-t border-gray-200">

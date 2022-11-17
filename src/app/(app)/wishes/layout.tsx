@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { ReactNode } from "react";
 import { FaArrowLeft, FaPencilAlt } from "react-icons/fa";
 import { Column } from "../../../components/column";
@@ -18,9 +19,9 @@ const WishesPage = ({ children }: { children: ReactNode }) => {
     <>
       <Column>
         <h2 className="nav-header flex items-stretch space-x-1">
-          <a href="/" className="p-1 sm:hidden">
+          <Link href="/" className="p-1 sm:hidden">
             <FaArrowLeft />
-          </a>
+          </Link>
           <span>All your wishes</span>
         </h2>
         <WishesComponent>
