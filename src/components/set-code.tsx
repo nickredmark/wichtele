@@ -4,15 +4,21 @@ import { FC, useEffect, useState } from "react";
 import { Form } from "./form";
 
 export const SetCode: FC = () => {
-  const [code, setCode] = useState("");
+  const [code, setCode] = useState<string>();
 
   useEffect(() => {
     const searchCode = new URLSearchParams(location.search).get("code");
     if (searchCode) {
       document.cookie = `code=${searchCode}`;
       location.replace("/");
+    } else {
+      setCode("");
     }
   }, []);
+
+  if (code === undefined) {
+    return null;
+  }
 
   return (
     <Form

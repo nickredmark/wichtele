@@ -1,5 +1,8 @@
-import { flatMap, maxBy, orderBy, uniqBy } from "lodash";
+import { clone, flatMap, maxBy, orderBy } from "lodash";
+import { ObjectId } from "mongodb";
 import { NextApiHandlerWithContext, withContext } from "../../utils/api";
+
+type Entity = { _id: ObjectId };
 
 const handler: NextApiHandlerWithContext = async (
   _req,
@@ -7,74 +10,79 @@ const handler: NextApiHandlerWithContext = async (
   { me, Users, Groups, Wishes, Comments }
 ) => {
   me.groups = await Groups.find({ members: me._id }).toArray();
-  me.wishes = await Wishes.find({ user: me._id, createdBy: me._id }).toArray();
+
+  const users = (
+    await Users.find({
+      _id: {
+        $in: flatMap(me.groups.map((group: any) => group.members)),
+      },
+    }).toArray()
+  ).map(({ _id, name, code, createdBy, loggedIn }) => ({
+    _id,
+    name,
+    createdBy,
+    ...(!loggedIn && createdBy.equals(me._id) && { code }),
+  }));
+
+  const allWishes = await Wishes.find({
+    groups: {
+      $in: me.groups.map((group: Entity) => group._id),
+    },
+  }).toArray();
+  me.wishes = allWishes
+    .filter((wish) => wish.user.equals(me._id) && wish.createdBy.equals(me._id))
+    .map(clone);
+
+  const allComments = await Comments.find(
+    {
+      wish: {
+        $in: allWishes.map((wish: Entity) => wish._id),
+      },
+    },
+    { sort: { createdAt: "desc" } }
+  ).toArray();
 
   for (const group of me.groups) {
-    group.members = (
-      await Users.find({
-        _id: {
-          $in: (group.members as unknown as string[]).map((id) => id),
-        },
-      }).toArray()
-    ).map(({ _id, name, code, createdBy, loggedIn }) => ({
-      _id,
-      name,
-      createdBy,
-      ...(!loggedIn && createdBy.equals(me._id) && { code }),
-    }));
+    group.members = users
+      .filter((user) =>
+        group.members.some((id: ObjectId) => id.equals(user._id))
+      )
+      .map(clone);
 
     for (const member of group.members) {
-      const candidates: any[] = [];
-
-      member.wishes = [];
-
       const isMe = member._id.equals(me._id);
 
-      const wishes = await Wishes.find({
-        user: member._id,
-        groups: group._id,
-        ...(isMe && {
-          createdBy: me._id,
-        }),
-      }).toArray();
-      candidates.push(...member.wishes);
+      member.wishes = allWishes
+        .filter(
+          (wish) =>
+            wish.user.equals(member._id) &&
+            wish.groups.some((id: ObjectId) => id.equals(group._id)) &&
+            (isMe
+              ? wish.createdBy.equals(me._id)
+              : !allComments.some(
+                  (comment) =>
+                    comment.wish.equals(wish._id) &&
+                    !comment.group.equals(group._id) &&
+                    !comment.createdBy.equals(wish.createdBy)
+                ))
+        )
+        .map(clone);
 
       for (const wish of member.wishes) {
-        const comments = await Comments.find(
-          {
-            wish: wish._id,
-            ...(isMe && {
-              createdBy: me._id,
-            }),
-          },
-          { sort: { createdAt: "desc" } }
-        ).toArray();
-
-        if (
-          !isMe &&
-          comments.some(
+        wish.comments = allComments
+          .filter(
             (comment) =>
-              !comment.group.equals(group._id) &&
-              !comment.createdBy.equals(wish.cretedBy)
+              comment.wish.equals(wish._id) &&
+              comment.group.equals(group._id) &&
+              (!isMe || comment.createdBy.equals(me._id))
           )
-        ) {
-          continue;
-        }
-
-        wish.comments = comments.filter((comment) =>
-          comment.group.equals(group._id)
-        );
-
-        wishes.push(wish);
-
-        if (wish.comments.length) {
-          candidates.push(wish.comments[wish.comments.length - 1]);
-        }
+          .map(clone);
       }
 
-      if (candidates.length) {
-        member.lastActivity = maxBy(candidates, "createdAt");
-      }
+      member.lastActivity = maxBy(
+        flatMap(member.wishes.map((wish: any) => [wish, ...wish.comments])),
+        "createdAt"
+      );
     }
 
     group.members = orderBy(
@@ -83,11 +91,6 @@ const handler: NextApiHandlerWithContext = async (
       "desc"
     );
   }
-
-  const users = uniqBy(
-    flatMap(me.groups.map((group: any) => group.members)),
-    (user: any) => user._id.toString()
-  );
 
   return { me, users };
 };

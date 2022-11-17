@@ -7,7 +7,6 @@ import { Column } from "../../../../../../components/column";
 import { Comments } from "../../../../../../components/comments";
 import { CreateWish } from "../../../../../../components/create-wish";
 import { useData } from "../../../../../../components/data";
-import { EditWishGroups } from "../../../../../../components/edit-wish-groups";
 import { Elf } from "../../../../../../components/elf";
 import { Markdown } from "../../../../../../components/markdown";
 import { WishComponent } from "../../../../../../components/wish";
@@ -63,13 +62,13 @@ const MemberLayout = ({
                 <div>
                   <Markdown>{wish.content}</Markdown>
                 </div>
-                {wish.createdBy === me._id && (
+                {/* {wish.createdBy === me._id && (
                   <EditWishGroups
                     id={wish._id}
                     groups={wish.groups}
                     availableGroups={me.groups}
                   />
-                )}
+                )} */}
                 <Comments comments={wish.comments} users={group.members} />
                 <AddComment
                   mine={wish.user === me._id}
