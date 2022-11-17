@@ -86,7 +86,7 @@ const handler: NextApiHandlerWithContext = async (
 
   const users = uniqBy(
     flatMap(me.groups.map((group: any) => group.members)),
-    "_id"
+    (user: any) => user._id.toString()
   );
 
   return { me, users };
