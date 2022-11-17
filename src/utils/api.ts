@@ -32,25 +32,16 @@ export const withContext =
 
       const { Users, Groups, Wishes, Comments } = await getDb();
 
-      const me = await (async () => {
-        const me = pick(
-          await Users.findOne({ code }),
-          "_id",
-          "name",
-          "loggedIn"
-        );
-        if (me) {
-          return me;
-        }
+      let me = await Users.findOne({ code });
 
-        if (code === process.env.ADMIN_CODE) {
-          await Users.insertOne({
-            name: "Admin",
-            code,
-          });
-          return pick(await Users.findOne({ code }), "_id", "name", "loggedIn");
-        }
-      })();
+      if (!me && code === process.env.ADMIN_CODE) {
+        await Users.insertOne({
+          name: "Admin",
+          code,
+          loggedIn: true,
+        });
+        me = await Users.findOne({ code });
+      }
 
       if (!me) {
         return sendError(res, 404, "No user found with this code.");
@@ -59,6 +50,8 @@ export const withContext =
       if (!me.loggedIn) {
         await Users.updateOne({ _id: me._id }, { $set: { loggedIn: true } });
       }
+
+      me = pick(me, "_id", "name");
 
       const now = new Date();
 

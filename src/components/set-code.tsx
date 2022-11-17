@@ -9,7 +9,7 @@ export const SetCode: FC = () => {
   useEffect(() => {
     const searchCode = new URLSearchParams(location.search).get("code");
     if (searchCode) {
-      document.cookie = `code=${searchCode}`;
+      document.cookie = `code=${searchCode};max-age=31536000`;
       location.replace("/");
     } else {
       setCode("");
@@ -24,7 +24,7 @@ export const SetCode: FC = () => {
     <Form
       className="flex flex-row flex-grow items-center"
       onSubmit={() => {
-        document.cookie = `code=${code}`;
+        document.cookie = `code=${code};max-age=31536000`;
         location.reload();
       }}
       canSubmit={!!code}
