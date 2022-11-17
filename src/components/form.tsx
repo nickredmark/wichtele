@@ -49,7 +49,7 @@ export const Form: FC<
           className="py-1 px-2 text-red-400 text-sm border bg-white border-red-400"
           onClick={onDelete}
         >
-          Delete
+          {deleteLabel}
         </button>
       )}
       {cancelLabel && (

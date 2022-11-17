@@ -9,6 +9,7 @@ export type User = {
   loggedIn?: boolean;
   createdBy: string;
   code?: string;
+  language: string;
 
   wishes: Wish[];
   groups: Group[];

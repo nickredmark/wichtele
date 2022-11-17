@@ -6,6 +6,7 @@ import { FC, PropsWithChildren, useState } from "react";
 import { Form, Textarea } from "../../../../components/form";
 import { WishComponent } from "../../../../components/wish";
 import { Group } from "../../../../config/models";
+import { useI18n } from "../../../../utils/i18n";
 
 type State = {
   _id: string;
@@ -19,6 +20,7 @@ export const EditWish: FC<{
 }> = ({ initialState, availableGroups }) => {
   const router = useRouter();
   const [{ _id, content, groups }, setState] = useState(initialState);
+  const { t } = useI18n();
 
   const onSubmit = async () => {
     await fetch(`${process.env.NEXT_PUBLIC_API_URL}/wishes/${_id}`, {
@@ -40,7 +42,7 @@ export const EditWish: FC<{
         <Form
           onSubmit={onSubmit}
           canSubmit={!!content && groups.length > 0}
-          deleteLabel="Delete"
+          deleteLabel={t("delete")}
           onDelete={async () => {
             await fetch(`${process.env.NEXT_PUBLIC_API_URL}/wishes/${_id}`, {
               method: "DELETE",
@@ -50,9 +52,9 @@ export const EditWish: FC<{
             });
             router.back();
           }}
-          cancelLabel="Cancel"
+          cancelLabel={t("cancel")}
           onCancel={() => router.back()}
-          submitLabel="Save"
+          submitLabel={t("save")}
           className="flex flex-col items-stretch"
         >
           <Textarea
@@ -61,7 +63,7 @@ export const EditWish: FC<{
               setState((state) => ({ ...state, content: e.target.value }))
             }
             onSubmit={onSubmit}
-            placeholder="New Wish"
+            placeholder={t("new-wish")}
           />
           {availableGroups.length > 0 && (
             <div className="flex flex-row flex-wrap mt-2 space-x-1 items-center">

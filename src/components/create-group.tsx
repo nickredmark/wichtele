@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { FC, useState } from "react";
 import { User } from "../config/models";
+import { useI18n } from "../utils/i18n";
 import { useData } from "./data";
 import { Form } from "./form";
 
@@ -10,6 +11,7 @@ export const CreateGroup: FC<{ me: User }> = ({ me }) => {
   const router = useRouter();
   const { refetch } = useData();
   const [name, setName] = useState("");
+  const { t } = useI18n();
 
   return (
     <Form
@@ -30,14 +32,14 @@ export const CreateGroup: FC<{ me: User }> = ({ me }) => {
         router.push(`groups/${id}/members/${me._id}`);
       }}
       canSubmit={!!name}
-      submitLabel="Create"
+      submitLabel={t("create")}
     >
       <input
         type="text"
         className="flex-grow"
         value={name}
         onChange={(e) => setName(e.target.value)}
-        placeholder="New group"
+        placeholder={t("new-group")}
         required
       />
     </Form>

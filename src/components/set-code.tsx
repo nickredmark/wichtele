@@ -34,7 +34,7 @@ export const SetCode: FC = () => {
         type="text"
         value={code}
         onChange={(e) => setCode(e.target.value)}
-        placeholder="Enter code"
+        placeholder="Code"
       />
     </Form>
   );

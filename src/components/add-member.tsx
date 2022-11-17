@@ -2,6 +2,7 @@
 
 import { FC, useState } from "react";
 import { User } from "../config/models";
+import { useI18n } from "../utils/i18n";
 import { useData } from "./data";
 import { Form } from "./form";
 
@@ -12,6 +13,7 @@ export const AddMember: FC<{
 }> = ({ groupId, members, users }) => {
   const { refetch } = useData();
   const [name, setName] = useState("");
+  const { t } = useI18n();
 
   return (
     <div className="pl-4 p-2 space-y-1">
@@ -39,13 +41,13 @@ export const AddMember: FC<{
           refetch();
         }}
         canSubmit={!!name}
-        submitLabel="Add"
+        submitLabel={t("add")}
       >
         <input
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          placeholder="New member"
+          placeholder={t("new-member")}
           required
         />
       </Form>

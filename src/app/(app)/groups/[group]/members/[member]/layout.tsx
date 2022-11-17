@@ -12,6 +12,7 @@ import { Elf } from "../../../../../../components/elf";
 import { Markdown } from "../../../../../../components/markdown";
 import { WishComponent } from "../../../../../../components/wish";
 import { WishesComponent } from "../../../../../../components/wishes";
+import { useI18n } from "../../../../../../utils/i18n";
 
 const MemberLayout = ({
   params: { group: groupId, member: memberId },
@@ -21,6 +22,7 @@ const MemberLayout = ({
   children: ReactNode;
 }) => {
   const { me } = useData();
+  const { t } = useI18n();
 
   const group = me.groups.find((group) => group._id === groupId)!;
   const member = group.members.find((member) => member._id === memberId)!;
@@ -57,7 +59,7 @@ const MemberLayout = ({
                         (member) => member._id === wish.createdBy
                       )?.name
                     }
-                    {"'s proposal"}
+                    {t("s-proposal")}
                   </span>
                 )}
                 <div>

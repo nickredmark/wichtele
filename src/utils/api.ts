@@ -47,6 +47,7 @@ export const withContext =
           name: "Admin",
           code,
           loggedIn: true,
+          language: "en",
         });
         me = await Users.findOne({ code });
       }
@@ -59,7 +60,7 @@ export const withContext =
         await Users.updateOne({ _id: me._id }, { $set: { loggedIn: true } });
       }
 
-      me = pick(me, "_id", "name");
+      me = pick(me, "_id", "name", "language");
 
       const now = new Date();
 

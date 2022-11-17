@@ -2,6 +2,7 @@
 
 import { FC, useState } from "react";
 import { FaPaperPlane } from "react-icons/fa";
+import { useI18n } from "../utils/i18n";
 import { useData } from "./data";
 import { Form, Textarea } from "./form";
 
@@ -12,6 +13,7 @@ export const AddComment: FC<{ mine: boolean; wish: string; group: string }> = ({
 }) => {
   const { refetch } = useData();
   const [content, setContent] = useState("");
+  const { t } = useI18n();
 
   const onSubmit = async () => {
     await fetch(`${process.env.NEXT_PUBLIC_API_URL}/comments`, {
@@ -41,7 +43,9 @@ export const AddComment: FC<{ mine: boolean; wish: string; group: string }> = ({
         onSubmit={onSubmit}
         value={content}
         onChange={(e) => setContent(e.target.value)}
-        placeholder={mine ? "Comment" : "Secret comment"}
+        placeholder={
+          mine ? t("comment-placeholder") : t("secret-comment-placeholder")
+        }
         required
       />
     </Form>

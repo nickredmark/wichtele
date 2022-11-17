@@ -17,10 +17,12 @@ import { Column } from "../../components/column";
 import { CreateGroup } from "../../components/create-group";
 import { useData } from "../../components/data";
 import { Group, User } from "../../config/models";
+import { useI18n } from "../../utils/i18n";
 
 export const Navigation = () => {
   const segments = useSelectedLayoutSegments();
   const { me, users, refetch } = useData();
+  const { t } = useI18n();
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -34,7 +36,9 @@ export const Navigation = () => {
     <Column className="sm:max-w-xs" border={false} paper={false}>
       <h1 className="nav-header">
         <Link href="/account" className="flex flex-row items-center">
-          <span className="flex-grow">Hallo, {me.name}</span>
+          <span className="flex-grow">
+            {t("hello")}, {me.name}!
+          </span>
           <FaUser />
         </Link>
       </h1>
@@ -48,7 +52,7 @@ export const Navigation = () => {
                   segments[0] === "wishes" ? "bg-gray-100" : "hover:bg-gray-100"
                 }`}
               >
-                <span className="flex-grow">Your Wishes</span>
+                <span className="flex-grow">{t("your-wishes")}</span>
               </Link>
             </h2>
           </div>
@@ -142,6 +146,7 @@ const Code: FC<{ id: string; code: string }> = ({ id, code }) => {
   const [copied, setCopied] = useState(false);
   const [open, setOpen] = useState(false);
   const { refetch } = useData();
+  const { t } = useI18n();
 
   useEffect(() => {
     setUrl(`${location.origin}/?code=${code}`);
@@ -167,9 +172,9 @@ const Code: FC<{ id: string; code: string }> = ({ id, code }) => {
             }
           }}
         >
-          <span>invite link</span>
+          <span>{t("invite-link")}</span>
           <FaCopy />
-          {copied && <div className="absolute top-full">Copied!</div>}
+          {copied && <div className="absolute top-full">{t("copied")}</div>}
         </button>
         <button
           onClick={async () => {

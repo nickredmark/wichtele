@@ -11,9 +11,11 @@ import { Elf } from "../../../components/elf";
 import { Markdown } from "../../../components/markdown";
 import { WishComponent } from "../../../components/wish";
 import { WishesComponent } from "../../../components/wishes";
+import { useI18n } from "../../../utils/i18n";
 
 const WishesPage = ({ children }: { children: ReactNode }) => {
   const { me } = useData();
+  const { t } = useI18n();
 
   return (
     <>
@@ -22,7 +24,7 @@ const WishesPage = ({ children }: { children: ReactNode }) => {
           <Link href="/" className="p-1 sm:hidden">
             <FaArrowLeft />
           </Link>
-          <span>All your wishes</span>
+          <span>{t("all-your-wishes")}</span>
         </h2>
         <WishesComponent>
           {me.wishes.length ? (

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { FC, useState } from "react";
 import { Pill } from "../app/(app)/wishes/[wish]/edit-wish";
 import { Group, User } from "../config/models";
+import { useI18n } from "../utils/i18n";
 import { useData } from "./data";
 import { Form, Textarea } from "./form";
 
@@ -21,6 +22,7 @@ export const CreateWish: FC<{
   const router = useRouter();
   const { refetch } = useData();
   const [{ content, groups }, setState] = useState(initialState);
+  const { t } = useI18n();
 
   const onSubmit = async () => {
     await fetch(`${process.env.NEXT_PUBLIC_API_URL}/wishes`, {
@@ -55,7 +57,7 @@ export const CreateWish: FC<{
             }
             onSubmit={onSubmit}
             placeholder={
-              user ? `Propose a secret gift idea for ${user.name}` : "New Wish"
+              user ? `${t("new-proposal-for")} ${user.name}` : t("new-wish")
             }
           />
           {availableGroups && availableGroups.length > 0 && (
