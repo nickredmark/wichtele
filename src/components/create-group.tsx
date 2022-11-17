@@ -3,10 +3,12 @@
 import { useRouter } from "next/navigation";
 import { FC, useState } from "react";
 import { User } from "../config/models";
+import { useData } from "./data";
 import { Form } from "./form";
 
 export const CreateGroup: FC<{ me: User }> = ({ me }) => {
   const router = useRouter();
+  const { refetch } = useData();
   const [name, setName] = useState("");
 
   return (
@@ -24,6 +26,7 @@ export const CreateGroup: FC<{ me: User }> = ({ me }) => {
         });
         const id = await res.json();
         setName("");
+        await refetch();
         router.push(`groups/${id}/members/${me._id}`);
       }}
       canSubmit={!!name}
