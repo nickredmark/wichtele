@@ -26,9 +26,16 @@ const handler: NextApiHandlerWithContext = async (
   }));
 
   const allWishes = await Wishes.find({
-    groups: {
-      $in: me.groups.map((group: Entity) => group._id),
-    },
+    $or: [
+      {
+        groups: {
+          $in: me.groups.map((group: Entity) => group._id),
+        },
+      },
+      {
+        createdBy: me._id,
+      },
+    ],
   }).toArray();
   me.wishes = allWishes
     .filter((wish) => wish.user.equals(me._id) && wish.createdBy.equals(me._id))
