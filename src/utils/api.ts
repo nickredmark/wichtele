@@ -23,6 +23,7 @@ export type NextApiHandlerWithContext = (
 export const withContext =
   (handler: NextApiHandlerWithContext) =>
   async (req: NextApiRequest, res: NextApiResponse) => {
+    let client;
     try {
       const code = req.cookies["code"];
 
@@ -30,7 +31,14 @@ export const withContext =
         return sendError(res, 400, "No code cookie provided.");
       }
 
-      const { Users, Groups, Wishes, Comments } = await getDb();
+      const {
+        client: clientTmp,
+        Users,
+        Groups,
+        Wishes,
+        Comments,
+      } = await getDb();
+      client = clientTmp;
 
       let me = await Users.findOne({ code });
 
@@ -71,6 +79,10 @@ export const withContext =
       }
       console.error(e);
       sendError(res, 500, "Unknown error");
+    } finally {
+      if (process.env.NODE_ENV !== "development") {
+        await client?.close();
+      }
     }
   };
 

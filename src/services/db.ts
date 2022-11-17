@@ -1,6 +1,6 @@
 import { MongoClient } from "mongodb";
 
-const client = new MongoClient(process.env.DB_URL!, {
+const client: MongoClient = new MongoClient(process.env.DB_URL!, {
   auth: {
     username: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,
@@ -15,5 +15,5 @@ export const getDb = async () => {
   const Wishes = db.collection("wishes");
   const Comments = db.collection("comments");
 
-  return { Users, Groups, Wishes, Comments };
+  return { client, Users, Groups, Wishes, Comments };
 };
