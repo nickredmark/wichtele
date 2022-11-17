@@ -1,15 +1,11 @@
 import { FC } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import stripMarkdown from "strip-markdown";
 
-export const Markdown: FC<{ children: string; strip?: boolean }> = ({
-  children,
-  strip,
-}) => (
+export const Markdown: FC<{ children: string }> = ({ children }) => (
   <ReactMarkdown
     className="markdown"
-    remarkPlugins={[remarkGfm, ...(strip ? [stripMarkdown] : [])]}
+    remarkPlugins={[remarkGfm]}
     linkTarget="_blank"
   >
     {children}

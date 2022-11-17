@@ -1,5 +1,6 @@
 import Joi from "joi";
-import { Collection, Document, ObjectId, WithId } from "mongodb";
+import { pick } from "lodash";
+import { Collection, ObjectId } from "mongodb";
 import { NextApiRequest, NextApiResponse } from "next";
 import { sendError } from "next/dist/server/api-utils";
 import { getDb } from "../services/db";
@@ -9,7 +10,7 @@ type Context = {
   Groups: Collection;
   Wishes: Collection;
   Comments: Collection;
-  me: WithId<Document>;
+  me: any;
   now: Date;
 };
 
@@ -32,7 +33,12 @@ export const withContext =
       const { Users, Groups, Wishes, Comments } = await getDb();
 
       const me = await (async () => {
-        const me = await Users.findOne({ code });
+        const me = pick(
+          await Users.findOne({ code }),
+          "_id",
+          "name",
+          "loggedIn"
+        );
         if (me) {
           return me;
         }
@@ -42,7 +48,7 @@ export const withContext =
             name: "Admin",
             code,
           });
-          return await Users.findOne({ code });
+          return pick(await Users.findOne({ code }), "_id", "name", "loggedIn");
         }
       })();
 
@@ -56,7 +62,7 @@ export const withContext =
 
       const now = new Date();
 
-      const ctx = {
+      const ctx: Context = {
         Users,
         Groups,
         Wishes,

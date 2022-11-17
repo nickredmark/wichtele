@@ -3,7 +3,7 @@ import { NextApiHandlerWithContext, withContext } from "../../utils/api";
 
 const handler: NextApiHandlerWithContext = async (
   _req,
-  res,
+  _res,
   { me, Users, Groups, Wishes, Comments }
 ) => {
   me.groups = await Groups.find({ members: me._id }).toArray();
@@ -16,37 +16,56 @@ const handler: NextApiHandlerWithContext = async (
           $in: (group.members as unknown as string[]).map((id) => id),
         },
       }).toArray()
-    ).map(({ _id, name, code, createdBy, loggedIn, ...rest }) => ({
+    ).map(({ _id, name, code, createdBy, loggedIn }) => ({
       _id,
       name,
       createdBy,
-      ...(!loggedIn && createdBy === me._id && { code }),
-      ...rest,
+      ...(!loggedIn && createdBy.equals(me._id) && { code }),
     }));
 
     for (const member of group.members) {
       const candidates: any[] = [];
 
-      member.wishes = await Wishes.find({
+      member.wishes = [];
+
+      const isMe = member._id.equals(me._id);
+
+      const wishes = await Wishes.find({
         user: member._id,
         groups: group._id,
-        ...(me._id === member._id && {
+        ...(isMe && {
           createdBy: me._id,
         }),
       }).toArray();
       candidates.push(...member.wishes);
 
       for (const wish of member.wishes) {
-        wish.comments = await Comments.find(
+        const comments = await Comments.find(
           {
             wish: wish._id,
-            group: group._id,
-            ...(me._id === member._id && {
+            ...(isMe && {
               createdBy: me._id,
             }),
           },
           { sort: { createdAt: "desc" } }
         ).toArray();
+
+        if (
+          !isMe &&
+          comments.some(
+            (comment) =>
+              !comment.group.equals(group._id) &&
+              !comment.createdBy.equals(wish.cretedBy)
+          )
+        ) {
+          continue;
+        }
+
+        wish.comments = comments.filter((comment) =>
+          comment.group.equals(group._id)
+        );
+
+        wishes.push(wish);
 
         if (wish.comments.length) {
           candidates.push(wish.comments[wish.comments.length - 1]);

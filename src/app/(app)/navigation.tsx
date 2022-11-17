@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter, useSelectedLayoutSegments } from "next/navigation";
+import { useSelectedLayoutSegments } from "next/navigation";
 import { FC, useEffect, useState } from "react";
 import {
   FaChevronDown,
@@ -9,17 +9,17 @@ import {
   FaTrash,
   FaUser,
 } from "react-icons/fa";
+import { remark } from "remark";
+import strip from "strip-markdown";
 import { AddMember } from "../../components/add-member";
 import { Column } from "../../components/column";
 import { CreateGroup } from "../../components/create-group";
 import { useData } from "../../components/data";
-import { Markdown } from "../../components/markdown";
 import { Group, User } from "../../config/models";
 
-export const Navigation = ({ me, users }: { me: User; users: User[] }) => {
+export const Navigation = () => {
   const segments = useSelectedLayoutSegments();
-  const router = useRouter();
-  const { refetch } = useData();
+  const { me, users, refetch } = useData();
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -110,9 +110,11 @@ const GroupComponent: FC<{
                   {member.code && <Code id={member._id} code={member.code} />}
                   {member.lastActivity && (
                     <span className="text-sm text-gray-500 break-words">
-                      <Markdown strip>
-                        {member.lastActivity.content.slice(0, 50)}
-                      </Markdown>
+                      {remark()
+                        .use(strip)
+                        .processSync(member.lastActivity.content)
+                        .toString()
+                        .slice(0, 50)}
                     </span>
                   )}
                 </a>

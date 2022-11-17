@@ -30,7 +30,7 @@ const RootLayout = async ({ children }: { children: ReactNode }) => {
     return (
       <DataProvider data={data}>
         <main>
-          <Navigation me={data.me} users={data.users} />
+          <Navigation />
           {children}
         </main>
       </DataProvider>
