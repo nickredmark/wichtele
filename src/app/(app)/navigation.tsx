@@ -7,7 +7,7 @@ import {
   FaChevronDown,
   FaChevronRight,
   FaCopy,
-  FaTrash,
+  FaTimes,
   FaUser,
 } from "react-icons/fa";
 import { remark } from "remark";
@@ -84,6 +84,7 @@ const GroupComponent: FC<{
     const [toggled, setToggled] = useState(
       first || (segments[0] === "groups" && segments[1] === group._id)
     );
+    const { refetch } = useData();
 
     return (
       <div className="border-gray-300 border-b">
@@ -114,7 +115,20 @@ const GroupComponent: FC<{
                     <h2>
                       <span className="flex-grow">{member.name}</span>
                     </h2>
-                    {member.code && <Code id={member._id} code={member.code} />}
+                    {member.code && (
+                      <Code
+                        code={member.code}
+                        onRemoveMember={async () => {
+                          await fetch(
+                            `${process.env.NEXT_PUBLIC_API_URL}/groups/${group._id}/members/${member._id}`,
+                            {
+                              method: "DELETE",
+                            }
+                          );
+                          await refetch();
+                        }}
+                      />
+                    )}
                     {member.lastActivity && (
                       <span className="text-sm text-gray-500 break-words">
                         {remark()
@@ -143,11 +157,13 @@ const GroupComponent: FC<{
   }
 };
 
-const Code: FC<{ id: string; code: string }> = ({ id, code }) => {
+const Code: FC<{ code: string; onRemoveMember: () => void }> = ({
+  code,
+  onRemoveMember,
+}) => {
   const [url, setUrl] = useState<string>();
   const [copied, setCopied] = useState(false);
   const [open, setOpen] = useState(false);
-  const { refetch } = useData();
   const { t } = useI18n();
 
   useEffect(() => {
@@ -179,14 +195,12 @@ const Code: FC<{ id: string; code: string }> = ({ id, code }) => {
           {copied && <div className="absolute top-full">{t("copied")}</div>}
         </button>
         <button
-          onClick={async () => {
-            await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/${id}`, {
-              method: "DELETE",
-            });
-            refetch();
+          onClick={(e) => {
+            e.preventDefault();
+            onRemoveMember();
           }}
         >
-          <FaTrash />
+          <FaTimes />
         </button>
       </div>
       {open && (
