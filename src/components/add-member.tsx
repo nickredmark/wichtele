@@ -11,7 +11,7 @@ export const AddMember: FC<{
   members: User[];
   users: User[];
 }> = ({ groupId, members, users }) => {
-  const { refetch } = useData();
+  const { me, refetch } = useData();
   const [name, setName] = useState("");
   const { t } = useI18n();
 
@@ -27,6 +27,7 @@ export const AddMember: FC<{
             },
             body: JSON.stringify({
               name,
+              language: me.language,
             }),
           });
           const id = await res.json();

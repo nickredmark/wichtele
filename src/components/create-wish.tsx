@@ -46,7 +46,7 @@ export const CreateWish: FC<{
         onSubmit={onSubmit}
         canSubmit={!!content}
         onCancel={() => router.back()}
-        submitLabel={user ? "Propose" : "Create"}
+        submitLabel={user ? t("propose") : t("create")}
         className="flex flex-row space-x-1"
       >
         <div className="flex flex-grow flex-col">

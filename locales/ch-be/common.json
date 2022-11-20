@@ -10,6 +10,7 @@
   "cancel": "Abbreche",
   "save": "Spychere",
   "add": "Dezuetue",
+  "propose": "Vorschla",
   "new-wish": "Nöie Wunsch",
   "new-member": "Nöis Mitglied",
   "new-group": "Nöi Gruppe",
@@ -21,6 +22,7 @@
   "language": "Sprach",
   "comment-placeholder": "Kommentar mit dr Gruppe",
   "secret-comment-placeholder": "Gheime Kommentar",
+  "everyone-sees-except": "Aui gseh die Kommentar ussert",
   "en": "Änglisch",
   "ch-be": "Bärndütsch"
 }

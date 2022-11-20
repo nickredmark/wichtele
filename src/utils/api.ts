@@ -4,6 +4,7 @@ import { Collection, ObjectId } from "mongodb";
 import { NextApiRequest, NextApiResponse } from "next";
 import { sendError } from "next/dist/server/api-utils";
 import { getDb } from "../services/db";
+import { LOCALES } from "./i18n";
 
 type Context = {
   Users: Collection;
@@ -92,6 +93,7 @@ export const TYPES = {
     .hex()
     .length(24)
     .custom((id) => new ObjectId(id)) as unknown as Joi.AnySchema<ObjectId>,
+  language: Joi.string().valid(...Object.keys(LOCALES)),
 };
 
 export const getEntity = async (

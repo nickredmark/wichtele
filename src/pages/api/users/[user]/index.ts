@@ -3,9 +3,9 @@ import {
   canManage,
   handleEntity,
   NextApiHandlerWithContext,
+  TYPES,
   withContext,
 } from "../../../../utils/api";
-import { LOCALES } from "../../../../utils/i18n";
 
 const handler: NextApiHandlerWithContext = async (
   req,
@@ -30,7 +30,7 @@ const handler: NextApiHandlerWithContext = async (
     },
     updateSchema: Joi.object({
       name: Joi.string(),
-      language: Joi.string().valid(...Object.keys(LOCALES)),
+      language: TYPES.language,
     }),
     canDelete: async (user) => {
       if (user._id.equals(me._id)) {

@@ -73,11 +73,7 @@ const MemberLayout = ({
                   />
                 )} */}
                 <Comments comments={wish.comments} users={group.members} />
-                <AddComment
-                  mine={wish.user === me._id}
-                  group={groupId}
-                  wish={wish._id}
-                />
+                <AddComment member={member} group={groupId} wish={wish._id} />
               </WishComponent>
             ))
           ) : (

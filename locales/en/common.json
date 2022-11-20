@@ -10,6 +10,7 @@
   "cancel": "Cancel",
   "save": "Save",
   "add": "Add",
+  "propose": "Propose",
   "new-wish": "New wish",
   "new-member": "New member",
   "new-group": "New group",
@@ -21,6 +22,7 @@
   "language": "Language",
   "comment-placeholder": "Share comment with group",
   "secret-comment-placeholder": "Secret comment",
+  "everyone-sees-except": "Everyone sees this comment except",
   "en": "English",
   "ch-be": "Bernese"
 }
