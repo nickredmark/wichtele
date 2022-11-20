@@ -20,6 +20,8 @@
   "log-out": "Uslogge",
   "name": "Name",
   "language": "Sprach",
+  "reserve": "Reserviere",
+  "reserved": "Reserviert",
   "comment-placeholder": "Kommentar mit dr Gruppe",
   "secret-comment-placeholder": "Gheime Kommentar",
   "everyone-sees-except": "Aui gseh die Kommentar ussert",

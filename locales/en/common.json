@@ -20,6 +20,8 @@
   "log-out": "Log out",
   "name": "Name",
   "language": "Language",
+  "reserve": "Reserve",
+  "reserved": "Reserved",
   "comment-placeholder": "Share comment with group",
   "secret-comment-placeholder": "Secret comment",
   "everyone-sees-except": "Everyone sees this comment except",

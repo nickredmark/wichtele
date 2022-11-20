@@ -27,7 +27,7 @@ export type Wish = {
   _id: string;
   content: string;
   groups: string[];
-  reserved: boolean;
+  reservedBy: string;
   user: string;
   createdBy: string;
   createdAt: string;

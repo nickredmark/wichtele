@@ -65,14 +65,7 @@ const handler: NextApiHandlerWithContext = async (
           (wish) =>
             wish.user.equals(member._id) &&
             wish.groups.some((id: ObjectId) => id.equals(group._id)) &&
-            (isMe
-              ? wish.createdBy.equals(me._id)
-              : !allComments.some(
-                  (comment) =>
-                    comment.wish.equals(wish._id) &&
-                    !comment.group.equals(group._id) &&
-                    !comment.createdBy.equals(wish.createdBy)
-                ))
+            (!isMe || wish.createdBy.equals(me._id))
         )
         .map(clone);
 

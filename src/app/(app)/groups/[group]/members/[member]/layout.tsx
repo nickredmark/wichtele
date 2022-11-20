@@ -21,7 +21,7 @@ const MemberLayout = ({
   params: { group: string; member: string };
   children: ReactNode;
 }) => {
-  const { me } = useData();
+  const { me, refetch } = useData();
   const { t } = useI18n();
 
   const group = me.groups.find((group) => group._id === groupId)!;
@@ -64,6 +64,32 @@ const MemberLayout = ({
                 )}
                 <div>
                   <Markdown>{wish.content}</Markdown>
+                </div>
+                <div className="flex justify-end">
+                  <button
+                    className={`py-1 px-2 ${
+                      wish.reservedBy === me._id
+                        ? "bg-gray-300 text-white"
+                        : wish.reservedBy
+                        ? "text-gray-500"
+                        : "bg-green-400 text-white"
+                    } cursor-pointer disabled:cursor-default`}
+                    disabled={!!wish.reservedBy && wish.reservedBy !== me._id}
+                    onClick={async () => {
+                      await fetch(
+                        `${process.env.NEXT_PUBLIC_API_URL!}/wishes/${
+                          wish._id
+                        }/reserved`,
+                        {
+                          method: "PUT",
+                          body: JSON.stringify(wish.reservedBy !== me._id),
+                        }
+                      );
+                      refetch();
+                    }}
+                  >
+                    {t(wish.reservedBy ? "reserved" : "reserve")}
+                  </button>
                 </div>
                 {/* {wish.createdBy === me._id && (
                   <EditWishGroups

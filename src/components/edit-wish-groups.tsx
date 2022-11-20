@@ -33,7 +33,7 @@ export const EditWishGroups: FC<{
                       : without(groups, _id),
                   }),
                 });
-                refetch();
+                await refetch();
               }}
             >
               {name}

@@ -96,35 +96,37 @@ const GroupComponent: FC<{
         </h2>
         {toggled && (
           <>
-            {group.members.map((member) => (
-              <div
-                key={member._id}
-                className={`relative border-t border-gray-200 ${
-                  segments[2] === "members" && segments[3] === member._id
-                    ? "bg-gray-100"
-                    : "hover:bg-gray-100"
-                }`}
-              >
-                <Link
-                  href={`/groups/${group._id}/members/${member._id}`}
-                  className="flex flex-col p-2 pl-4"
+            {group.members
+              .filter((member) => member._id !== me._id)
+              .map((member) => (
+                <div
+                  key={member._id}
+                  className={`relative border-t border-gray-200 ${
+                    segments[2] === "members" && segments[3] === member._id
+                      ? "bg-gray-100"
+                      : "hover:bg-gray-100"
+                  }`}
                 >
-                  <h2>
-                    <span className="flex-grow">{member.name}</span>
-                  </h2>
-                  {member.code && <Code id={member._id} code={member.code} />}
-                  {member.lastActivity && (
-                    <span className="text-sm text-gray-500 break-words">
-                      {remark()
-                        .use(strip)
-                        .processSync(member.lastActivity.content)
-                        .toString()
-                        .slice(0, 50)}
-                    </span>
-                  )}
-                </Link>
-              </div>
-            ))}
+                  <Link
+                    href={`/groups/${group._id}/members/${member._id}`}
+                    className="flex flex-col p-2 pl-4"
+                  >
+                    <h2>
+                      <span className="flex-grow">{member.name}</span>
+                    </h2>
+                    {member.code && <Code id={member._id} code={member.code} />}
+                    {member.lastActivity && (
+                      <span className="text-sm text-gray-500 break-words">
+                        {remark()
+                          .use(strip)
+                          .processSync(member.lastActivity.content)
+                          .toString()
+                          .slice(0, 50)}
+                      </span>
+                    )}
+                  </Link>
+                </div>
+              ))}
             <div className="border-t border-gray-200">
               {group.createdBy === me._id && (
                 <AddMember
