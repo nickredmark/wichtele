@@ -15,7 +15,5 @@ export const getDb = async () => {
   const Wishes = db.collection("wishes");
   const Comments = db.collection("comments");
 
-  await Users.updateMany({}, { $set: { language: "ch-be" } });
-
   return { client, Users, Groups, Wishes, Comments };
 };

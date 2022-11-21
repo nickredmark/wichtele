@@ -106,10 +106,12 @@ const MemberLayout = ({
             <Elf />
           )}
         </WishesComponent>
-        <CreateWish
-          user={member._id !== me._id ? member : undefined}
-          initialState={{ content: "", groups: [groupId] }}
-        />
+        {(!group.assignment || member._id === me._id) && (
+          <CreateWish
+            user={member._id !== me._id ? member : undefined}
+            initialState={{ content: "", groups: [groupId] }}
+          />
+        )}
       </Column>
       {children}
     </>
