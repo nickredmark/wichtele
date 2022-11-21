@@ -6,6 +6,12 @@ import {
   TextareaHTMLAttributes,
 } from "react";
 
+export const DELETE_STYLE =
+  "py-1 px-2 text-red-400 text-sm border bg-white border-red-400";
+
+export const SUBMIT_STYLE =
+  "py-1 px-2 bg-green-400 text-white cursor-pointer disabled:cursor-default";
+
 export const Form: FC<
   PropsWithChildren<{
     formRef?: RefObject<HTMLFormElement>;
@@ -44,11 +50,7 @@ export const Form: FC<
     {children}
     <div className="flex flex-wrap items-stretch justify-end space-x-1">
       {deleteLabel && (
-        <button
-          type="button"
-          className="py-1 px-2 text-red-400 text-sm border bg-white border-red-400"
-          onClick={onDelete}
-        >
+        <button type="button" className={DELETE_STYLE} onClick={onDelete}>
           {deleteLabel}
         </button>
       )}
@@ -61,11 +63,7 @@ export const Form: FC<
           {cancelLabel}
         </button>
       )}
-      <button
-        type="submit"
-        disabled={!canSubmit}
-        className="py-1 px-2 bg-green-400 text-white cursor-pointer disabled:cursor-default"
-      >
+      <button type="submit" disabled={!canSubmit} className={SUBMIT_STYLE}>
         {submitLabel}
       </button>
     </div>

@@ -1,16 +1,15 @@
 "use client";
 
 import { FC, useState } from "react";
-import { User } from "../config/models";
+import { Group, User } from "../config/models";
 import { useI18n } from "../utils/i18n";
 import { useData } from "./data";
-import { Form } from "./form";
+import { DELETE_STYLE, Form, SUBMIT_STYLE } from "./form";
 
 export const AddMember: FC<{
-  groupId: string;
-  members: User[];
+  group: Group;
   users: User[];
-}> = ({ groupId, members, users }) => {
+}> = ({ group, users }) => {
   const { me, refetch } = useData();
   const [name, setName] = useState("");
   const { t } = useI18n();
@@ -32,7 +31,7 @@ export const AddMember: FC<{
           });
           const id = await res.json();
           const res2 = await fetch(
-            `${process.env.NEXT_PUBLIC_API_URL}/groups/${groupId}/members/${id}`,
+            `${process.env.NEXT_PUBLIC_API_URL}/groups/${group._id}/members/${id}`,
             {
               method: "PUT",
             }
@@ -58,7 +57,7 @@ export const AddMember: FC<{
             .filter(
               (user) =>
                 user.name.toLowerCase().includes(name.toLowerCase()) &&
-                !members.some((member) => member._id === user._id)
+                !group.members.some((member) => member._id === user._id)
             )
             .map((user) => (
               <button
@@ -66,7 +65,7 @@ export const AddMember: FC<{
                 className="hover:bg-gray-100 p-1 text-left"
                 onClick={async () => {
                   await fetch(
-                    `${process.env.NEXT_PUBLIC_API_URL}/groups/${groupId}/members/${user._id}`,
+                    `${process.env.NEXT_PUBLIC_API_URL}/groups/${group._id}/members/${user._id}`,
                     {
                       method: "PUT",
                     }
@@ -79,6 +78,20 @@ export const AddMember: FC<{
               </button>
             ))}
       </div>
+      <button
+        className={group.assignment ? DELETE_STYLE : SUBMIT_STYLE}
+        onClick={async () => {
+          await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/groups/${group._id}/assignment`,
+            {
+              method: group.assignment ? "DELETE" : "PUT",
+            }
+          );
+          refetch();
+        }}
+      >
+        {t(group.assignment ? "delete-assignment" : "create-assignment")}
+      </button>
     </div>
   );
 };

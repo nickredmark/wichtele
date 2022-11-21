@@ -99,6 +99,10 @@ const GroupComponent: FC<{
           <>
             {group.members
               .filter((member) => member._id !== me._id)
+              .filter(
+                (member) =>
+                  !group.assignment || member._id === group.assignment[me._id]
+              )
               .map((member) => (
                 <div
                   key={member._id}
@@ -143,11 +147,7 @@ const GroupComponent: FC<{
               ))}
             <div className="border-t border-gray-200">
               {group.createdBy === me._id && (
-                <AddMember
-                  groupId={group._id}
-                  members={group.members}
-                  users={users}
-                />
+                <AddMember group={group} users={users} />
               )}
             </div>
           </>

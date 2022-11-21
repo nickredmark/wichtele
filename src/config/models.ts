@@ -21,6 +21,7 @@ export type Group = {
   createdBy: string;
 
   members: (User & { lastActivity?: Wish | Comment })[];
+  assignment: Record<string, string>;
 };
 
 export type Wish = {
