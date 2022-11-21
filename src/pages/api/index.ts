@@ -57,6 +57,12 @@ const handler: NextApiHandlerWithContext = async (
       )
       .map(clone);
 
+    if (group.assignment && !group.createdBy.equals(me._id)) {
+      group.assignment = {
+        [me._id]: group.assignment[me._id],
+      };
+    }
+
     for (const member of group.members) {
       const isMe = member._id.equals(me._id);
 

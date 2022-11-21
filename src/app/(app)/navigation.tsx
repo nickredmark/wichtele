@@ -101,7 +101,9 @@ const GroupComponent: FC<{
               .filter((member) => member._id !== me._id)
               .filter(
                 (member) =>
-                  !group.assignment || member._id === group.assignment[me._id]
+                  group.createdBy === me._id ||
+                  !group.assignment ||
+                  member._id === group.assignment[me._id]
               )
               .map((member) => (
                 <div
