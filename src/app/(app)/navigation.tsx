@@ -85,6 +85,7 @@ const GroupComponent: FC<{
       first || (segments[0] === "groups" && segments[1] === group._id)
     );
     const { refetch } = useData();
+    const { t } = useI18n();
 
     return (
       <div className="border-gray-300 border-b">
@@ -119,7 +120,11 @@ const GroupComponent: FC<{
                     className="flex flex-col p-2 pl-4"
                   >
                     <h2>
-                      <span className="flex-grow">{member.name}</span>
+                      <span className="flex-grow">
+                        {member.name}
+                        {group.assignment?.[me._id] === member._id &&
+                          ` (${t("your-beneficiary")})`}
+                      </span>
                     </h2>
                     {member.code && (
                       <Code
