@@ -158,7 +158,7 @@ const GroupComponent: FC<{
                           ` (${t("your-beneficiary")})`}
                       </span>
                     </h2>
-                    {member.code && (
+                    {group.createdBy === me._id && (
                       <Code
                         code={member.code}
                         onRemoveMember={async () => {
@@ -196,7 +196,7 @@ const GroupComponent: FC<{
   }
 };
 
-const Code: FC<{ code: string; onRemoveMember: () => void }> = ({
+const Code: FC<{ code?: string; onRemoveMember: () => void }> = ({
   code,
   onRemoveMember,
 }) => {
@@ -216,7 +216,7 @@ const Code: FC<{ code: string; onRemoveMember: () => void }> = ({
   return (
     <>
       <div className="text-xs text-gray-500 flex flex-row absolute top-3 right-2 space-x-2">
-        <button
+        {code && <button
           className="flex flex-row space-x-1 items-center"
           onBlur={() => setCopied(false)}
           onClick={(e) => {
@@ -232,7 +232,7 @@ const Code: FC<{ code: string; onRemoveMember: () => void }> = ({
           <span>{t("invite-link")}</span>
           <FaCopy />
           {copied && <div className="absolute top-full">{t("copied")}</div>}
-        </button>
+        </button>}
         <button
           onClick={(e) => {
             e.preventDefault();
