@@ -56,7 +56,7 @@ export const Navigation = () => {
               </Link>
             </h2>
           </div>
-          {me.proposals.length && (
+          {me.proposals.length > 0 && (
             <div className="border-gray-300 border-b">
               <h2>
                 <Link
@@ -72,7 +72,7 @@ export const Navigation = () => {
               </h2>
             </div>
           )}
-          {me.gifts.length && (
+          {me.gifts.length > 0 && (
             <div className="border-gray-300 border-b">
               <h2>
                 <Link
