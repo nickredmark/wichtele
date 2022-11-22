@@ -11,7 +11,8 @@ const WishPage = ({
   params: { wish: string };
 }) => {
   const { me } = useData();
-  const wish = me.wishes.find((wish) => wish._id === wishId)!;
+  const wish = (me.wishes.find((wish) => wish._id === wishId) ||
+    me.proposals.find((wish) => wish._id === wishId))!;
   const { t } = useI18n();
 
   return (

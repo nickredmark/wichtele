@@ -1,9 +1,11 @@
 {
   "hello": "Hi",
   "your-wishes": "Your wishes",
+  "your-proposals": "Your proposals",
   "invite-link": "invite link",
   "copied": "copied!",
   "all-your-wishes": "All your wishes",
+  "for": "For",
   "edit-wish": "Edit wish",
   "create": "Create",
   "delete": "Delete",

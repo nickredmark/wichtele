@@ -12,6 +12,7 @@ export type User = {
   language: string;
 
   wishes: Wish[];
+  proposals: Wish[];
   groups: Group[];
 };
 

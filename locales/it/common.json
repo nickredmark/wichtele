@@ -1,9 +1,11 @@
 {
   "hello": "Ciao",
   "your-wishes": "I tuoi desideri",
+  "your-proposals": "Le tue proposte",
   "invite-link": "link invito",
   "copied": "copiato!",
   "all-your-wishes": "Tutti i tuoi desideri",
+  "for": "Per",
   "edit-wish": "Modifica desiderio",
   "create": "Crea",
   "delete": "Elimina",
