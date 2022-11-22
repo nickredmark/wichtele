@@ -45,6 +45,9 @@ const handler: NextApiHandlerWithContext = async (
       (wish) => !wish.user.equals(me._id) && wish.createdBy.equals(me._id)
     )
     .map(clone);
+  me.gifts = allWishes
+    .filter((wish) => wish.reservedBy?.equals(me._id))
+    .map(clone);
 
   const allComments = await Comments.find(
     {

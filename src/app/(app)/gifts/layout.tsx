@@ -5,7 +5,6 @@ import { ReactNode } from "react";
 import { FaArrowLeft, FaPencilAlt } from "react-icons/fa";
 import { Column } from "../../../components/column";
 import { useData } from "../../../components/data";
-import { EditWishGroups } from "../../../components/edit-wish-groups";
 import { Elf } from "../../../components/elf";
 import { Markdown } from "../../../components/markdown";
 import { WishComponent } from "../../../components/wish";
@@ -13,7 +12,7 @@ import { WishesComponent } from "../../../components/wishes";
 import { useI18n } from "../../../utils/i18n";
 
 const WishesPage = ({ children }: { children: ReactNode }) => {
-  const { me, users } = useData();
+  const { me, users, refetch } = useData();
   const { t } = useI18n();
 
   return (
@@ -23,13 +22,13 @@ const WishesPage = ({ children }: { children: ReactNode }) => {
           <Link href="/" className="p-1 sm:hidden">
             <FaArrowLeft />
           </Link>
-          <span>{t("your-wishes")}</span>
+          <span>{t("your-gifts")}</span>
         </h2>
         <WishesComponent>
-          {me.proposals.length ? (
-            me.proposals.map((wish) => (
+          {me.gifts.length ? (
+            me.gifts.map((wish) => (
               <WishComponent key={wish._id}>
-                <a href={`/proposals/${wish._id}`} className="float-right">
+                <a href={`/gifts/${wish._id}`} className="float-right">
                   <FaPencilAlt />
                 </a>
                 <span className="font-bold text-sm">
@@ -39,11 +38,25 @@ const WishesPage = ({ children }: { children: ReactNode }) => {
                 <div>
                   <Markdown>{wish.content}</Markdown>
                 </div>
-                <EditWishGroups
-                  id={wish._id}
-                  groups={wish.groups}
-                  availableGroups={me.groups}
-                />
+                <div className="flex justify-end">
+                  <button
+                    className={`py-1 px-2 bg-gray-300 text-white cursor-pointer disabled:cursor-default`}
+                    onClick={async () => {
+                      await fetch(
+                        `${process.env.NEXT_PUBLIC_API_URL!}/wishes/${
+                          wish._id
+                        }/reserved`,
+                        {
+                          method: "PUT",
+                          body: JSON.stringify(wish.reservedBy !== me._id),
+                        }
+                      );
+                      refetch();
+                    }}
+                  >
+                    {t("reserved")}
+                  </button>
+                </div>
               </WishComponent>
             ))
           ) : (

@@ -72,6 +72,22 @@ export const Navigation = () => {
               </h2>
             </div>
           )}
+          {me.gifts.length && (
+            <div className="border-gray-300 border-b">
+              <h2>
+                <Link
+                  href="/gifts"
+                  className={`p-2 flex flex-row items-center ${
+                    segments[0] === "wishes"
+                      ? "bg-gray-100"
+                      : "hover:bg-gray-100"
+                  }`}
+                >
+                  <span className="flex-grow">{t("your-gifts")}</span>
+                </Link>
+              </h2>
+            </div>
+          )}
           {me.groups.map((group, i) => (
             <GroupComponent
               key={group._id}

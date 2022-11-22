@@ -13,6 +13,7 @@ export type User = {
 
   wishes: Wish[];
   proposals: Wish[];
+  gifts: Wish[];
   groups: Group[];
 };
 
