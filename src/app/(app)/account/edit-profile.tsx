@@ -8,6 +8,7 @@ import { LOCALES, useI18n } from "../../../utils/i18n";
 
 export const EditProfile: FC<{ me: User }> = ({ me }) => {
   const [name, setName] = useState(me.name);
+  const [address, setAddress] = useState(me.address);
   const [language, setLanguage] = useState(me.language);
   const { refetch } = useData();
   const { t } = useI18n();
@@ -22,6 +23,7 @@ export const EditProfile: FC<{ me: User }> = ({ me }) => {
           },
           body: JSON.stringify({
             name,
+            address,
             language,
           }),
         });
@@ -39,6 +41,15 @@ export const EditProfile: FC<{ me: User }> = ({ me }) => {
           placeholder="Will Ferrell"
           value={name}
           onChange={(e) => setName(e.target.value)}
+        />
+      </div>
+      <div className="flex flex-row space-x-1 items-center">
+        <label className="w-32 text-sm font-medium">{t("address")}</label>
+        <textarea
+          value={address}
+          onChange={(e) => setAddress(e.target.value)}
+          placeholder={t("address-placeholder")}
+          rows={4}
         />
       </div>
       <div className="flex flex-row space-x-1 items-center">

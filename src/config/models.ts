@@ -10,6 +10,7 @@ export type User = {
   createdBy: string;
   code?: string;
   language: string;
+  address: string;
 
   wishes: Wish[];
   proposals: Wish[];

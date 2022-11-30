@@ -61,7 +61,7 @@ export const withContext =
         await Users.updateOne({ _id: me._id }, { $set: { loggedIn: true } });
       }
 
-      me = pick(me, "_id", "name", "language");
+      me = pick(me, "_id", "name", "address", "language");
 
       const now = new Date();
 

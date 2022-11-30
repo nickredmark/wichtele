@@ -65,7 +65,7 @@ const MemberLayout = ({
                 <div>
                   <Markdown>{wish.content}</Markdown>
                 </div>
-                <div className="flex justify-end">
+                <div className="flex flex-col items-end">
                   <button
                     className={`py-1 px-2 ${
                       wish.reservedBy === me._id
@@ -90,6 +90,12 @@ const MemberLayout = ({
                   >
                     {t(wish.reservedBy ? "reserved" : "reserve")}
                   </button>
+                  {wish.reservedBy === me._id && member.address && (
+                    <div className="text-sm mt-2">
+                      <div className="mb-1">{t("send-to")}</div>
+                      <div className="whitespace-pre">{member.address}</div>
+                    </div>
+                  )}
                 </div>
                 {/* {wish.createdBy === me._id && (
                   <EditWishGroups

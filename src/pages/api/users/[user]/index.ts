@@ -30,6 +30,7 @@ const handler: NextApiHandlerWithContext = async (
     },
     updateSchema: Joi.object({
       name: Joi.string(),
+      address: Joi.string(),
       language: TYPES.language,
     }),
     canDelete: async (user) => {

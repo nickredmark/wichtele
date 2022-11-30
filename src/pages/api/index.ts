@@ -17,9 +17,10 @@ const handler: NextApiHandlerWithContext = async (
         $in: flatMap(me.groups.map((group: any) => group.members)),
       },
     }).toArray()
-  ).map(({ _id, name, code, createdBy, loggedIn, language }) => ({
+  ).map(({ _id, name, address, code, createdBy, loggedIn, language }) => ({
     _id,
     name,
+    address,
     createdBy,
     language,
     ...(!loggedIn && createdBy.equals(me._id) && { code }),

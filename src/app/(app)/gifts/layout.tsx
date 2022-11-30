@@ -26,39 +26,47 @@ const WishesPage = ({ children }: { children: ReactNode }) => {
         </h2>
         <WishesComponent>
           {me.gifts.length ? (
-            me.gifts.map((wish) => (
-              <WishComponent key={wish._id}>
-                <a href={`/gifts/${wish._id}`} className="float-right">
-                  <FaPencilAlt />
-                </a>
-                <span className="font-bold text-sm">
-                  {t("for")}{" "}
-                  {users.find((user) => user._id === wish.user)?.name}
-                </span>
-                <div>
-                  <Markdown>{wish.content}</Markdown>
-                </div>
-                <div className="flex justify-end">
-                  <button
-                    className={`py-1 px-2 bg-gray-300 text-white cursor-pointer disabled:cursor-default`}
-                    onClick={async () => {
-                      await fetch(
-                        `${process.env.NEXT_PUBLIC_API_URL!}/wishes/${
-                          wish._id
-                        }/reserved`,
-                        {
-                          method: "PUT",
-                          body: JSON.stringify(wish.reservedBy !== me._id),
-                        }
-                      );
-                      refetch();
-                    }}
-                  >
-                    {t("reserved")}
-                  </button>
-                </div>
-              </WishComponent>
-            ))
+            me.gifts.map((wish) => {
+              const user = users.find((user) => user._id === wish.user)!;
+              return (
+                <WishComponent key={wish._id}>
+                  <a href={`/gifts/${wish._id}`} className="float-right">
+                    <FaPencilAlt />
+                  </a>
+                  <span className="font-bold text-sm">
+                    {t("for")} {user.name}
+                  </span>
+                  <div>
+                    <Markdown>{wish.content}</Markdown>
+                  </div>
+                  <div className="flex flex-col items-end">
+                    <button
+                      className={`py-1 px-2 bg-gray-300 text-white cursor-pointer disabled:cursor-default`}
+                      onClick={async () => {
+                        await fetch(
+                          `${process.env.NEXT_PUBLIC_API_URL!}/wishes/${
+                            wish._id
+                          }/reserved`,
+                          {
+                            method: "PUT",
+                            body: JSON.stringify(wish.reservedBy !== me._id),
+                          }
+                        );
+                        refetch();
+                      }}
+                    >
+                      {t("reserved")}
+                    </button>
+                    {user.address && (
+                      <div className="text-sm mt-2">
+                        <div className="mb-1">{t("send-to")}</div>
+                        <div className="whitespace-pre">{user.address}</div>
+                      </div>
+                    )}
+                  </div>
+                </WishComponent>
+              );
+            })
           ) : (
             <Elf />
           )}
