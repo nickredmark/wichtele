@@ -88,7 +88,17 @@ const MemberLayout = ({
                       refetch();
                     }}
                   >
-                    {t(wish.reservedBy ? "reserved" : "reserve")}
+                    {t(
+                      wish.reservedBy
+                        ? wish.reservedBy === me._id
+                          ? "reserved-by-you"
+                          : group.members.some(
+                              (member) => member._id === wish.reservedBy
+                            )
+                          ? "reserved"
+                          : "reserved-in-other-group"
+                        : "reserve"
+                    )}
                   </button>
                   {wish.reservedBy === me._id && member.address && (
                     <div className="text-sm mt-2">
