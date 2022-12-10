@@ -56,7 +56,7 @@ const handler: NextApiHandlerWithContext = async (
         $in: allWishes.map((wish: Entity) => wish._id),
       },
     },
-    { sort: { createdAt: "desc" } }
+    { sort: { createdAt: "asc" } }
   ).toArray();
 
   for (const group of me.groups) {
